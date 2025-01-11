@@ -13,29 +13,28 @@ def main():
   parser.add_argument("file", type=str, help="The filepath to a stats screenshot from Pokemon Scarlet/Violet")
   parser.add_argument("-p", "--pokemon", help="Specify the pokemon being scanned.",
                     type=str)
+  parser.add_argument("-v", "--verbosity", action="store_true",
+                    help="Display full scanned OCR values.")                
   args = parser.parse_args()                  
+  file = args.file
+  
+  img = np.array(Image.open(file))
+  text = pytesseract.image_to_string(img)
 
-  filename = 'img/milotic.jpg'
-  img2 = np.array(Image.open(filename))
-  text2 = pytesseract.image_to_string(img2)
-
-  #print('=====IMAGE 1=====')
-  #print(text)
-  #print('=====IMAGE 2=====')
-  print(text2)
-  pokemon = parse_ocr_output(text2)
-  nature_modified_stats = nature.get_affected_stats(filename)
+  if(args.verbosity):
+    print('=====IMAGE=====')
+    print(text)
+  pokemon = parse_ocr_output(text)
+  nature_modified_stats = nature.get_affected_stats(file)
   
   print('=====SCANNED STATS=====')
   print(pokemon)
   print(f'Stat boosted by nature: {nature_modified_stats[0].upper()}')
   print(f'Stat nerfed by nature: {nature_modified_stats[1].upper()}')
   print('=====CALCULATED STATS=====')
-  #pkdata = pb.pokemon('Rillaboom')
+  
   pkdata = pb.APIResource('pokemon', args.pokemon.lower())
   stats = pkdata.stats
-  
-  
   
   print('HP EVs is ' + str(calculate_hp_evs(pokemon, stats)))
   for stat in ['atk', 'defense', 'spatk', 'spdef', 'speed']:
