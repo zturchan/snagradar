@@ -9,5 +9,5 @@ A tool for scanning Pokemon Scarlet &amp; Violet stat pages to display their EVs
 
 # FAQ
 1. What about forms?
-Specify forms according to the names used by https://pokeapi.co/. e.g. If you want info on Landorus Therian, you would run `python main.py -p landorus-therian /path/to/your/picture.jpg`
+Specify forms according to the variants names used by https://pokeapi.co/. e.g. If you want info on Landorus Therian, you would run `python main.py -p landorus-therian /path/to/your/picture.jpg`
    
