@@ -10,13 +10,10 @@ import argparse
 
 def main():
   parser = argparse.ArgumentParser()
+  parser.add_argument("file", type=str, help="The filepath to a stats screenshot from Pokemon Scarlet/Violet")
   parser.add_argument("-p", "--pokemon", help="Specify the pokemon being scanned.",
                     type=str)
   args = parser.parse_args()                  
-
-  filename = 'img/1.jpg'
-  img1 = np.array(Image.open(filename))
-  text = pytesseract.image_to_string(img1)
 
   filename = 'img/milotic.jpg'
   img2 = np.array(Image.open(filename))
