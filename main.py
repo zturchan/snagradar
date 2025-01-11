@@ -10,35 +10,31 @@ import argparse
 
 def main():
   parser = argparse.ArgumentParser()
+  parser.add_argument("file", type=str, help="The filepath to a stats screenshot from Pokemon Scarlet/Violet")
   parser.add_argument("-p", "--pokemon", help="Specify the pokemon being scanned.",
                     type=str)
+  parser.add_argument("-v", "--verbosity", action="store_true",
+                    help="Display full scanned OCR values.")                
   args = parser.parse_args()                  
+  file = args.file
+  
+  img = np.array(Image.open(file))
+  text = pytesseract.image_to_string(img)
 
-  filename = 'img/1.jpg'
-  img1 = np.array(Image.open(filename))
-  text = pytesseract.image_to_string(img1)
-
-  filename = 'img/milotic.jpg'
-  img2 = np.array(Image.open(filename))
-  text2 = pytesseract.image_to_string(img2)
-
-  #print('=====IMAGE 1=====')
-  #print(text)
-  #print('=====IMAGE 2=====')
-  print(text2)
-  pokemon = parse_ocr_output(text2)
-  nature_modified_stats = nature.get_affected_stats(filename)
+  if(args.verbosity):
+    print('=====IMAGE=====')
+    print(text)
+  pokemon = parse_ocr_output(text)
+  nature_modified_stats = nature.get_affected_stats(file)
   
   print('=====SCANNED STATS=====')
   print(pokemon)
   print(f'Stat boosted by nature: {nature_modified_stats[0].upper()}')
   print(f'Stat nerfed by nature: {nature_modified_stats[1].upper()}')
   print('=====CALCULATED STATS=====')
-  #pkdata = pb.pokemon('Rillaboom')
+  
   pkdata = pb.APIResource('pokemon', args.pokemon.lower())
   stats = pkdata.stats
-  
-  
   
   print('HP EVs is ' + str(calculate_hp_evs(pokemon, stats)))
   for stat in ['atk', 'defense', 'spatk', 'spdef', 'speed']:
@@ -95,9 +91,11 @@ def backtest_hp_evs(lvl, real_stat, base_stat, evs_guess):
   # to determine EVs.
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
-  
+  if(real_stat < backtest_value):
+    print(f'{stat.upper()} does not have 31 IVs. Assuming EVs = 0.')
+    return 0
   while(backtest_value != real_stat and evs_guess <= 252):
-    print(f'Guessed HP EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
+    #print(f'Guessed HP EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
     evs_guess += 4
     backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
   return evs_guess  
@@ -117,8 +115,11 @@ def backtest_non_hp_evs(lvl, real_stat, base_stat, nature_factor, stat, evs_gues
   # to determine EVs.
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
+  if(real_stat < backtest_value):
+    print(f'{stat.upper()} does not have 31 IVs. Assuming EVs = 0.')
+    return 0
   while(backtest_value != real_stat and evs_guess <= 252):
-    print(f'Guessed {stat.upper()} EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
+    #print(f'Guessed {stat.upper()} EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
     evs_guess += 4
     backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
   return evs_guess  
