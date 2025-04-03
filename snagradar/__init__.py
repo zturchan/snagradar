@@ -71,6 +71,7 @@ def create_app(test_config=None):
         print(pkmn)
         response = pkmn.__dict__
         
+        os.rm(path)
         return response
 
     return app
