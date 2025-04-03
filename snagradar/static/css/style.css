@@ -1,0 +1,88 @@
+#preview-container {
+  background-color: #D3D3D3;
+  padding: 0;
+}
+
+#preview {
+  width: 100%;
+}
+
+.instructions {
+  margin-left: 15px !important;
+}
+
+.container .row .stat {
+  width: 150px;
+  padding: 10px;
+}
+
+input[type="number"]:not(#lvl)::-webkit-outer-spin-button,
+input[type="number"]:not(#lvl)::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]:not(#lvl) {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+#stats-container {
+  max-width: 400px;
+}
+
+#scan-button {
+  width: 100%;
+}
+
+#snag-error{
+  background-color: red;
+  color: white;
+  width: 100%;
+  display: block;
+  padding: 12px;
+  border-radius: 6px;
+  display: none;
+}
+
+#snag-warning{
+  background-color: yellow;
+  color: black;
+  width: 100%;
+  display: block;
+  padding: 12px;
+  border-radius: 6px;
+  display: none;
+}
+
+#snag-info{
+  background-color: green;
+  color: white;
+  width: 100%;
+  display: block;
+  padding: 12px;
+  border-radius: 6px;
+  display: none;
+}
+
+#error-indicator, #info-indicator, #warning-indicator{
+  font-weight: bold;
+}
+
+.clear-button{
+  float: right;
+  width: 40px;
+}
+
+.card-title{
+  vertical-align: center;
+  padding-top: 7px;
+}
+
+.card-title-row{
+  padding-top: 5px;
+}
+
+form#form{
+  padding-top: 5px;
+}
