@@ -19,8 +19,7 @@ def parse_ocr_output(output, pokemon):
   expecting_def_chunk = False
   expecting_spdef_chunk = False
   expecting_speed_chunk = False
-  
-  
+    
   for chunk in chunks:
     # remove whitespace from OCR output
     chunk = "".join(chunk.split())
@@ -49,7 +48,7 @@ def parse_ocr_output(output, pokemon):
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (hp_value_match):
         hp = hp_value_match.group(1)
-        expecting_hp_chunk = False
+        expecting_hp_chunk = False      
       continue
     
     # This is for OCRSpace format
@@ -114,22 +113,21 @@ def parse_ocr_output(output, pokemon):
         expecting_speed_chunk = False
       continue  
     
-  print ('during parsing, name is ' + name + ' - ' + pokemon.name)  
   if pokemon.name == 'null':
     pokemon.name = name
-  if pokemon.lvl is None:
+  if pokemon.lvl is None and int(lvl) > 0:
     pokemon.lvl = int(lvl)
-  if pokemon.hp is None:
+  if pokemon.hp is None and int(hp) > 0:
     pokemon.hp = int(hp)
-  if pokemon.atk is None:
+  if pokemon.atk is None and int(atk) > 0:
     pokemon.atk = int(atk)
-  if pokemon.defense is None:
+  if pokemon.defense is None and int(defense) > 0:
     pokemon.defense = int(defense)
-  if pokemon.spatk is None:
+  if pokemon.spatk is None and int(spatk) > 0:
     pokemon.spatk = int(spatk)
-  if pokemon.spdef is None:
+  if pokemon.spdef is None and int(spdef) > 0:
     pokemon.spdef = int(spdef)
-  if pokemon.speed is None:
+  if pokemon.speed is None and int(speed) > 0:
     pokemon.speed = int(speed)
 
   return pokemon
