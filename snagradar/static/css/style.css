@@ -1,3 +1,11 @@
+#howitworks{
+  text-align: right;
+}
+
+#howitworks:hover span{
+  color: white !important;
+}
+
 #preview-container {
   background-color: #D3D3D3;
   padding: 0;
