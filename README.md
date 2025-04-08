@@ -1,5 +1,5 @@
-# SnagRadar
-A tool for scanning Pokemon Scarlet &amp; Violet stat pages to display their EVs and other hidden stats
+# Silph Scope (nee SnagRadar)
+A tool for scanning Pokemon Scarlet &amp; Violet stat pages to display their EVs and other hidden stats. Currently branded as Silph Scope, snagradar was the development name.
 
 ## Getting started
 1. Install Python 3.12
