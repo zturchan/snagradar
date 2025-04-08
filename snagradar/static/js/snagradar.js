@@ -13,7 +13,6 @@ $(document).ready(function () {
       $(this).val("");
     });
     $("#preview").attr("src", "");
-    
   });
 
   $("form#form").submit(function (e) {
