@@ -25,7 +25,7 @@ def create_app():
     def snagradar():
         pkmn = Pokemon('', 0,0,0,0,0,0,0) 
 
-        return render_template('snagradar.html', pokemon=pkmn, pokemon_identifier='abomasnow')
+        return render_template('scan.html', pokemon=pkmn, pokemon_identifier='abomasnow')
     
     @app.errorhandler(SnagException)
     def handle_exception(e):
