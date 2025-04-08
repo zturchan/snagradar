@@ -86,3 +86,19 @@ input[type="number"]:not(#lvl) {
 form#form{
   padding-top: 5px;
 }
+
+footer .col-sm.center{
+  text-align: center;
+}
+
+footer .col-sm.right{
+  text-align: right;
+}
+
+footer a{
+  text-decoration: none;
+}
+footer a:hover{
+  text-decoration: underline;
+}
+

@@ -173,6 +173,4 @@ cython_debug/
 # API Keys, and other dev cruft
 constants.py
 oldsrc/
-img_out/
-img/
 instance/
