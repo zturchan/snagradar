@@ -54,7 +54,6 @@ class Pokemon:
   
   
   def nature_valid(self):
-    print ('nature is ' + self.nature)
     valid = self.nature is not None and self.is_valid()
     if (valid):
       return valid
