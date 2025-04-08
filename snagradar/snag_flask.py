@@ -58,7 +58,7 @@ def create_app(test_config=None):
         img = request.files["image"]
 
         path = None
-        if img.filename is not '':
+        if img.filename != '':
             print(img.filename)
             filename = secure_filename(img.filename)
             path = os.path.join(app.instance_path, app.config['UPLOAD_FOLDER'], filename)
@@ -71,7 +71,7 @@ def create_app(test_config=None):
         print(pkmn)
         response = pkmn.__dict__
         
-        os.rm(path)
+#        os.rm(path)
         return response
 
     return app
