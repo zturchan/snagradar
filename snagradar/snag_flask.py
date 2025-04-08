@@ -16,6 +16,10 @@ def create_app():
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    try:
+        os.makedirs(os.path.join(app.instance_path, app.config['UPLOAD_FOLDER']))
+    except OSError:
+        pass
 
     @app.route('/')
     def snagradar():
@@ -45,10 +49,8 @@ def create_app():
 
         path = None
         if img.filename != '':
-            print(img.filename)
             filename = secure_filename(img.filename)
             path = os.path.join(app.instance_path, app.config['UPLOAD_FOLDER'], filename)
-            print('Uploaded file to: ' + str(path))
 
             img.save(path)
         pkmn = pokemonparser.scan(path, pokemon_name, request.form['lvl'],request.form['hp'],request.form['atk'],request.form['defense'],request.form['spatk'],request.form['spdef'],request.form['speed'],request.form['nature'],)
@@ -56,7 +58,7 @@ def create_app():
             raise SnagException('Stats read correctly, but could not determine EVs.')
         response = pkmn.__dict__
         
-        os.rm(path)
+        os.remove(path)
         return response
 
     return app
