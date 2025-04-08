@@ -110,3 +110,8 @@ footer a:hover{
   text-decoration: underline;
 }
 
+.accordion img{
+  max-height: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+}

@@ -1,0 +1,159 @@
+{% extends 'snagradar.html' %}
+{% block content %}
+<div class="container gx-3 py-3 mt-3">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    What does Silph Scope do?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Simply put, Silph Scope uses the visisble stats from a Pokemon in Pokemon Scarlet/Violet and
+                    calculates their hidden EV values.
+                    A rough estimate of these values is available by viewing the "Judge" feature in game, but that
+                    doesn't give you the exact values.
+                    </br /><br />
+                    I made Silph Scope as a tool for helping me manage the hundreds of competitive Pokemon I've made
+                    over the years. As someone who tries new teams all the time, I found myself wanting to know
+                    what the EVs were on any of my dozens of Incineroars, but inputting their stats manually into
+                    Showdown was too tedious. Knowing the exact EVs will let you decide if you want to use a specific
+                    Pokemon,
+                    or how many stat-reducing berries you need to use.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    What are EVs?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    In short, EVs are values that determine how strong your Pokemon are. These exact values are hidden
+                    in game, but are critical to know for competitive trainers. You can find a thorough explanation on
+                    <a target="_blank" href="https://www.serebii.net/games/evs.shtml">Serebii</a>.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    How do I use Silph Scope?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Silph scope aims to be as flexible as possible, and will try to work with whatever you give it. You
+                    can scan based on any of the following:
+                    <ul>
+                        <li>Manually typed in stats. Select the Pokemon, level, 6 stat values, and nature and click
+                            <b>Scan</b>.</li>
+                        <li>A screenshot from your Nintendo Switch console. Open your Pokemon's stats screen (the one
+                            that displays the hexagon) and use the "Post" or "Send to Smartphone" options from the Album
+                            to transfer the screenshot to your device. Then upload the photo and click <b>Scan</b>.<br/>
+                            
+                        
+                        </li>
+                        <li>A photo of your Nintendo Switch console. Open your Pokemon's stats screen (the one that
+                            displays the hexagon), and take a photo of your Switch. Then upload that photo, and click
+                            <b>Scan</b>. You'll have best results if your photo is a landscape photo, taken more or less
+                            straight on.
+                            
+                        </li>
+                    </ul>
+                    <br />
+                    <b>NOTE:</b> Sometimes, the scanner might have trouble picking some things up. You can combine a
+                    picture and some manually typed stats if you're having trouble.
+                    <br/><br>
+                    <b>Sample Images that work:</b>
+                    <div>
+                    <img src="/static/img/lando.jpg"/><img src="/static/img/landopicture.jpg"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    What does Silph Scope require to work?
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    There are a few things that make Silph Scope's job easier.
+                    <ul>
+                        <li>If uploading a photo, try and access the stats screen from the Boxes screen. If you use the
+                            party in the overworld, the background may cause issues with the scan.</li>
+                        <li>Silph Scope requires your game to be in <b>English</b>. Other languages are not supported.
+                            If you use a picture or screenshot of a non-English Pokemon, you will need to specify the
+                            Pokemon species using the dropdown.</li>
+                        <li>Similarly, if your Pokemon has a nickname, you will need to specify the Pokemon species
+                            using the dropdown.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    This is cool! What technology did you use to make it?
+                </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Silph Scope is a simple Python 3 Flask App. I used the following to make it work.
+                    <ul>
+                        <li>Python 3.12 (main application language)</li>
+                        <li><a href="https://pokeapi.co/" target="_blank">PokeAPI</a> and the <a href="https://github.com/PokeAPI/pokebase" target="_blank">PokeBase</a> wrapper for getting all the Pokemon data.</li>
+                        <li><a href="https://ocr.space/" target="_blank">OCR.Space</a> for analyzing the contents of the uploaded photos.</li>
+                        <li><a href="https://opencv.org/" target="_blank">OpenCV</a> for other image manipulation and analysis.</li>
+                        <li>Apache2 and <a href="https://modwsgi.readthedocs.io/en/master/">mod_wsgi</a> for serving the application.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    Help! It's not working!
+                </button>
+            </h2>
+            <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Silph Scope is still a work in progress. Feel free to create an issue in the <a href="https://github.com/zturchan/snagradar" target="_blank">GitHub Repo</a>, message me on 
+                    <a href="https://bsky.app/profile/zturchan.bsky.social" target="_blank">BlueSky</a>, or message me on Discord (username zturchan). I can't guaruntee I'll get to your issue right away, but I appreciate any and all feedback.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                    Will Silph Scope support Pokemon Champions/Legends ZA/Gen 10?
+                </button>
+            </h2>
+            <div id="collapseSeven" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Assuming that I'm able to, I plan to continue adding support for whatever game the current VGC circuit uses.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock %}

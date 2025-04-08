@@ -61,4 +61,7 @@ def create_app():
         os.remove(path)
         return response
 
+    @app.route('/howitworks', methods=['GET'])
+    def how_it_works():
+        return render_template('howitworks.html')
     return app
