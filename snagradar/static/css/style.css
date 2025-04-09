@@ -43,6 +43,14 @@ input[type="number"]:not(#lvl) {
   width: 100%;
 }
 
+#scan-button .scan-spinner {
+  display: none;
+}
+
+#scan-button .scan-spinner.active {
+  display: inline-block;
+}
+
 #snag-error{
   background-color: red;
   color: white;
