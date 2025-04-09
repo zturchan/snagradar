@@ -8,6 +8,4 @@ A tool for scanning Pokemon Scarlet &amp; Violet stat pages to display their EVs
 4. run with `python main.py -p pikachu /path/to/your/picture.jpg` where pikachu is any pokemon.
 
 # FAQ
-1. What about forms?
-Specify forms according to the variants names used by https://pokeapi.co/. e.g. If you want info on Landorus Therian, you would run `python main.py -p landorus-therian /path/to/your/picture.jpg`
-   
+An up-to-date FAQ can be found here: http://silphscope.ca/howitworks
