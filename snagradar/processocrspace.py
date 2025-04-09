@@ -35,6 +35,6 @@ def run_ocr(filename):
     print("Image uploaded was " + str(filesize_in_kb) + "KB, resizing.")
     filename = compress_image_for_ocr(filename, factor_bigger)
     print("Resized File at " + str(filename))
-    result = api.ocr_file(filename)
-    print('OCR result is ' + str(result))
-    return result
+  result = api.ocr_file(filename)
+  print('OCR result is ' + str(result))
+  return result
