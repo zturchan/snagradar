@@ -2,6 +2,9 @@ import re
 from pokemon import Pokemon
 
 def parse_ocr_output(output, pokemon):
+  if (output is None):
+    # Happens if the crop failed and didn't get us a good screengrab
+    return pokemon
   chunks = output.split('\n')
   lvl = 0
   hp = 0
