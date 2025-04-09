@@ -21,7 +21,8 @@ $(document).ready(function () {
     $('#snag-info').hide();
     $('#snag-warning').hide();
     var formData = new FormData(this);
-    
+    $('.scan-spinner').addClass("active");
+
     // When using the FormData constructor, selects are not picked up so we need to add them
     $("form#form select").each(function(){
         var $select = $(this);
@@ -41,9 +42,10 @@ $(document).ready(function () {
           $('#error-text').text("An undefined server error occurred.");
           $('#snag-error').show();
         }
-        
+        $('.scan-spinner').removeClass("active");
       },
       success: function (pokemon) {
+        $('.scan-spinner').removeClass("active");
         $("#hp-stat").val(pokemon['hp']);
         $("#atk-stat").val(pokemon['atk']);
         $("#defense-stat").val(pokemon['defense']);
