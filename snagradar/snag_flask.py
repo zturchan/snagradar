@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from pokemon import Pokemon
 from snagexception import SnagException
 from werkzeug.utils import secure_filename
+from fileutil import cleanup
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -58,7 +59,7 @@ def create_app():
             pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
         response = pkmn.__dict__
         
-        os.remove(path)
+        cleanup(path)
         return response
 
     @app.route('/howitworks', methods=['GET'])
