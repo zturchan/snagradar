@@ -34,7 +34,7 @@ def parse_ocr_output(output, pokemon):
       expecting_name_chunk = False
       continue
 
-    lvl_match = re.search('[LI][xv].*?(\d+)', chunk, re.IGNORECASE)
+    lvl_match = re.search('[LI][vxy].*?(\d+)', chunk, re.IGNORECASE)
     if(lvl_match):
       lvl = lvl_match.group(1)
       continue
@@ -65,7 +65,7 @@ def parse_ocr_output(output, pokemon):
         expecting_spatk_chunk = False
       continue
       
-    atk_match = re.search('.*?A[tl][tl]ack.*?$', chunk)
+    atk_match = re.search('.*?A[tl][tl]a[ckd].*?$', chunk)
     if(atk_match):
        expecting_atk_chunk = True
        continue

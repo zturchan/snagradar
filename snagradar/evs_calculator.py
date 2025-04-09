@@ -12,6 +12,9 @@ def get_closest_multiple_of_4_not_higher(val):
 
 def calculate_hp_evs(pokemon, stats):
   # assume hypertrained/max ivs
+  if (pokemon.hp is None):
+    # We don't have an HP stat to work off. Return 0.
+    return 0
   hp_base = get_base_stat(stats, 'hp')
   x = (int(pokemon.hp) - int(pokemon.lvl) - 10)
   y = x * 100
@@ -34,10 +37,9 @@ def backtest_hp_evs(lvl, real_stat, base_stat, evs_guess):
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
   if(real_stat < backtest_value):
-    print('hp does not have 31 IVs. Assuming EVs = 0.')
+    # hp does not have 31 IVs. Assuming EVs = 0.
     return 0
   while(backtest_value != real_stat and evs_guess <= 252):
-    #print(f'Guessed HP EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
     evs_guess += 4
     backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
   return evs_guess  
@@ -58,7 +60,7 @@ def backtest_non_hp_evs(lvl, real_stat, base_stat, nature_factor, stat, evs_gues
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
   if(real_stat < backtest_value):
-    #print(f'{stat.upper()} does not have 31 IVs. Assuming EVs = 0.')
+    # stat does not have 31 IVs. Assuming EVs = 0.
     return 0
   while(backtest_value != real_stat and evs_guess <= 252):
     #print(f'Guessed {stat.upper()} EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
@@ -98,8 +100,12 @@ def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   nature_factor = get_nature_modifier(nature_modified_stats, stat)
   
   base_stat = get_base_stat(stats, stat)
+
   iv = 31
   real_stat = int(getattr(pokemon, stat))
+  if (real_stat is None):
+    # We don't have a stat detected, return 0
+    return 0
   a = real_stat / nature_factor
   b = a - 5
   c = b * 100

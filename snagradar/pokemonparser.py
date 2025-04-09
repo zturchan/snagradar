@@ -23,8 +23,11 @@ def scan(img,
      # Don't bother trying to do any OCR if the user has already told us everything we would get
      # from an image
      return parse_pokemon(pokemon)
+
   try:
     pokemon = parse(img, pokemon)
+    if (not pokemon.base_stats_valid()):
+      raise SnagException('Base stats are not valid. Trying again with cropped version.')
   except: 
     pokemon = parse_cropped(img, pokemon)
   print('=====SCANNED STATS=====')
@@ -48,7 +51,11 @@ def determine_identifier_from_in_game_name(name):
        return [pokemon]
     except AttributeError:
        # The pokemon doesn't exist, so maybe it's a forme
-       varieties = pb.APIResource('pokemon-species', name_guess).varieties
+       try:
+          varieties = pb.APIResource('pokemon-species', name_guess).varieties
+       except AttributeError:
+          # It's not a species and not a forme, it's PROBABLY a nickname or foreign name.
+          raise SnagException("Could not detect Pokemon Name. Name is either in a non-English language OR has a nickname. Select the pokemon's name from the dropdown and re-scan.")
        possible_pokemon = []
        for variety in varieties:
           pkmn = pb.APIResource('pokemon', variety.pokemon.name)
@@ -77,8 +84,6 @@ def parse_cropped(file, pokemon):
 def parse(file, pokemon):     
    text = run_ocr(file)
    pkmn = parse_ocr_output(text, pokemon)
-   if (not pkmn.base_stats_valid()):
-      raise SnagException('Base stats are not valid')
    return pkmn
    
 def iterate_through_varieties(pokemon, possible_pokemon):
@@ -127,7 +132,7 @@ def iterate_through_natures(pokemon, stats):
                   other_stat_evs[stat] = evs_calculator.calculate_non_hp_evs(pokemon, stats, [nature_up_stat, nature_down_stat], stat)
               evs_total = hp_evs + sum(other_stat_evs.values())
               if(evs_total > 508):
-                  print('total evs=' + str(evs_total))
+                  # This nature is invalid, so try the next one.
                   continue;
               acceptable_natures.append([evs_total, nature_up_stat, nature_down_stat, hp_evs, other_stat_evs])
               

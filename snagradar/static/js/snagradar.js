@@ -29,7 +29,6 @@ $(document).ready(function () {
         formData.append($select.attr('name'), $select.val());
     });
 
-
     $.ajax({
       url: $(this).attr("action"),
       type: 'POST',
@@ -65,12 +64,12 @@ $(document).ready(function () {
         if (pokemon.msg != null && pokemon.msg.length > 0){
           $('#warning-text').text(pokemon.msg);
           $('#snag-warning').show();
+        } else {
+          $('#snag-info').show();
+          setTimeout(() => {
+            $('#snag-info').hide();
+          }, 5000);
         }
-        $('#info-text').text(pokemon.msg);
-        $('#snag-info').show();
-        setTimeout(() => {
-          $('#snag-info').hide();
-        }, 5000);
       },
       cache: false,
       contentType: false,
