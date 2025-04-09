@@ -54,6 +54,9 @@ def create_app():
             path = os.path.join(app.instance_path, app.config['UPLOAD_FOLDER'], filename)
 
             img.save(path)
+        else:
+            if (pokemon_name is None or pokemon_name == 'null'):
+                raise SnagException("You must supply an image or select a Pokemon name.")
         pkmn = pokemonparser.scan(path, pokemon_name, request.form['lvl'],request.form['hp'],request.form['atk'],request.form['defense'],request.form['spatk'],request.form['spdef'],request.form['speed'],request.form['nature'],)
         if (not pkmn.evs_valid()):
             pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
