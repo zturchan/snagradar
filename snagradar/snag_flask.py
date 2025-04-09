@@ -29,7 +29,7 @@ def create_app():
     
     @app.errorhandler(SnagException)
     def handle_exception(e):
-        print("HANLDING EXCEPTION")
+        print("HANLDING EXCEPTION: " + str(e.description))
         """Return JSON instead of HTML for HTTP errors."""
         # start with the correct headers and status code from the error
         # replace the body with JSON
@@ -54,8 +54,8 @@ def create_app():
 
             img.save(path)
         pkmn = pokemonparser.scan(path, pokemon_name, request.form['lvl'],request.form['hp'],request.form['atk'],request.form['defense'],request.form['spatk'],request.form['spdef'],request.form['speed'],request.form['nature'],)
-        if (not pkmn.evs_valid):
-            raise SnagException('Stats read correctly, but could not determine EVs.')
+        if (not pkmn.evs_valid()):
+            pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
         response = pkmn.__dict__
         
         os.remove(path)

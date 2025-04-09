@@ -12,6 +12,9 @@ def get_closest_multiple_of_4_not_higher(val):
 
 def calculate_hp_evs(pokemon, stats):
   # assume hypertrained/max ivs
+  if (pokemon.hp is None):
+    # We don't have an HP stat to work off. Return 0.
+    return 0
   hp_base = get_base_stat(stats, 'hp')
   x = (int(pokemon.hp) - int(pokemon.lvl) - 10)
   y = x * 100
@@ -97,8 +100,12 @@ def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   nature_factor = get_nature_modifier(nature_modified_stats, stat)
   
   base_stat = get_base_stat(stats, stat)
+
   iv = 31
   real_stat = int(getattr(pokemon, stat))
+  if (real_stat is None):
+    # We don't have a stat detected, return 0
+    return 0
   a = real_stat / nature_factor
   b = a - 5
   c = b * 100
