@@ -24,12 +24,12 @@ class Pokemon:
 
   def evs_valid(self):
     valid = (self.base_stats_valid() == True and
-             self.evs_hp is not None and self.evs_hp > 0 and self.evs_hp<= 252 and
-             self.evs_atk is not None and self.evs_atk > 0 and self.evs_atk<= 252 and
-             self.evs_defense is not None and self.evs_defense > 0 and self.evs_defense<= 252 and
-             self.evs_spatk is not None and self.evs_spatk > 0 and self.evs_spatk<= 252 and
-             self.evs_spdef is not None and self.evs_spdef > 0 and self.evs_spdef<= 252 and
-             self.evs_speed is not None and self.evs_speed > 0 and self.evs_speed<= 252)
+             self.evs_hp is not None and self.evs_hp >= 0 and self.evs_hp<= 252 and
+             self.evs_atk is not None and self.evs_atk >= 0 and self.evs_atk<= 252 and
+             self.evs_defense is not None and self.evs_defense >= 0 and self.evs_defense<= 252 and
+             self.evs_spatk is not None and self.evs_spatk >= 0 and self.evs_spatk<= 252 and
+             self.evs_spdef is not None and self.evs_spdef >= 0 and self.evs_spdef<= 252 and
+             self.evs_speed is not None and self.evs_speed >= 0 and self.evs_speed<= 252)
     
     if(valid):
       return True
