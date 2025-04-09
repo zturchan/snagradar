@@ -13,7 +13,7 @@ def write_cropped(path):
     """
     print('Reading file for crop: ' + path)
     angle, crop_img = correct_skew(crop_switch_screen(path))
-    cropped_filename = os.path.join(os.path.dirname(path), 'crop' + str(uuid.uuid4()) + '.png')
+    cropped_filename = os.path.join(os.path.dirname(path), os.path.splitext(os.path.basename(path))[0] + '-cropped.jpg')
     print('Saving cropped file: ' + cropped_filename)
     cv2.imwrite(cropped_filename, crop_img)
     return cropped_filename
