@@ -34,10 +34,9 @@ def backtest_hp_evs(lvl, real_stat, base_stat, evs_guess):
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
   if(real_stat < backtest_value):
-    print('hp does not have 31 IVs. Assuming EVs = 0.')
+    # hp does not have 31 IVs. Assuming EVs = 0.
     return 0
   while(backtest_value != real_stat and evs_guess <= 252):
-    #print(f'Guessed HP EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
     evs_guess += 4
     backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
   return evs_guess  
@@ -58,7 +57,7 @@ def backtest_non_hp_evs(lvl, real_stat, base_stat, nature_factor, stat, evs_gues
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
   backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
   if(real_stat < backtest_value):
-    #print(f'{stat.upper()} does not have 31 IVs. Assuming EVs = 0.')
+    # stat does not have 31 IVs. Assuming EVs = 0.
     return 0
   while(backtest_value != real_stat and evs_guess <= 252):
     #print(f'Guessed {stat.upper()} EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
