@@ -61,8 +61,9 @@ def create_app():
         if (pkmn.evs_valid() == False):
             pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
         response = pkmn.__dict__
-        
-        cleanup(path)
+       
+        if(path is not None):
+            cleanup(path)
         return response
 
     @app.route('/howitworks', methods=['GET'])
