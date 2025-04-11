@@ -9,7 +9,6 @@ def get_closest_multiple_of_4_not_higher(val):
     if ((val - i) % 4 == 0):
       return val - i
 
-
 def calculate_hp_evs(pokemon, stats):
   # assume hypertrained/max ivs
   if (pokemon.hp is None):
@@ -26,23 +25,32 @@ def calculate_hp_evs(pokemon, stats):
     evs_guess = 0
   evs_guess = get_closest_multiple_of_4_not_higher(evs_guess)    
   
-  return backtest_hp_evs(pokemon.lvl, int(pokemon.hp), hp_base, evs_guess)  
+  return backtest_hp_evs(pokemon, int(pokemon.hp), hp_base, evs_guess)
   
 # stat calcs
 # https://bulbapedia.bulbagarden.net/wiki/Stat#Example_2  
 
-def backtest_hp_evs(lvl, real_stat, base_stat, evs_guess):
+def backtest_hp_evs(pokemon, real_stat, base_stat, evs_guess):
   # The stat calculation formula has a couple of math.floor calls, which cause us to lose precision when reversing the formula
   # to determine EVs.
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
-  backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
+  backtest_value = determine_hp_stat_value_from_evs(pokemon.lvl, base_stat, evs_guess)
   if(real_stat < backtest_value):
-    # hp does not have 31 IVs. Assuming EVs = 0.
+    pokemon.append_msg("HP stat has <31 IVs. Assuming EVs = 0")
     return 0
   while(backtest_value != real_stat and evs_guess <= 252):
     evs_guess += 4
-    backtest_value = determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess)
-  return evs_guess  
+    backtest_value = determine_hp_stat_value_from_evs(pokemon.lvl, base_stat, evs_guess)
+  minimum_aceptable_evs = evs_guess
+
+  while(backtest_value == real_stat and evs_guess <= 252):
+    evs_guess += 1
+    backtest_value = determine_hp_stat_value_from_evs(pokemon.lvl, base_stat, evs_guess)
+
+  maximum_acceptable_evs = evs_guess - 1
+
+  pokemon.set_ev_range('hp', minimum_aceptable_evs, maximum_acceptable_evs)
+  return minimum_aceptable_evs
   
 def determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess):
   a = 2 * base_stat
@@ -54,19 +62,30 @@ def determine_hp_stat_value_from_evs(lvl, base_stat, evs_guess):
   g = f + int(lvl)
   return math.floor(g)
 
-def backtest_non_hp_evs(lvl, real_stat, base_stat, nature_factor, stat, evs_guess):
+def backtest_non_hp_evs(pokemon, real_stat, base_stat, nature_factor, stat, evs_guess):
   # The stat calculation formula has a couple of math.floor calls, which cause us to lose precision when reversing the formula
   # to determine EVs.
   # So once we have a guess that's close, run through the nearby values until we find the correct one.
+  lvl = pokemon.lvl
   backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
   if(real_stat < backtest_value):
-    # stat does not have 31 IVs. Assuming EVs = 0.
+    pokemon.append_msg(stat.upper() + " stat has <31 IVs. Assuming EVs = 0")
     return 0
+
   while(backtest_value != real_stat and evs_guess <= 252):
-    #print(f'Guessed {stat.upper()} EVs were {str(evs_guess)} ({backtest_value}), but was wrong. Trying {str(evs_guess + 4)}')
     evs_guess += 4
     backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
-  return evs_guess  
+
+  minimum_aceptable_evs = evs_guess;
+
+  while(backtest_value == real_stat and evs_guess <= 252):
+    evs_guess += 1
+    backtest_value = determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess)
+
+  maximum_acceptable_evs = evs_guess - 1
+  pokemon.set_ev_range(stat, minimum_aceptable_evs, maximum_acceptable_evs)
+
+  return minimum_aceptable_evs
   
 def determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, evs_guess):
   a = 2 * base_stat
@@ -117,5 +136,5 @@ def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   # Might appear negative due to the destructive math.floor usages. Set guess to zero and then backtest to confirm.
   if (evs_guess < 0):
     evs_guess = 0
-  evs_guess = get_closest_multiple_of_4_not_higher(evs_guess)    
-  return backtest_non_hp_evs(pokemon.lvl, real_stat, base_stat, nature_factor, stat, evs_guess)  
+  evs_guess = get_closest_multiple_of_4_not_higher(evs_guess)
+  return backtest_non_hp_evs(pokemon, real_stat, base_stat, nature_factor, stat, evs_guess)
