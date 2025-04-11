@@ -59,7 +59,7 @@ def create_app():
                 raise SnagException("You must supply an image or select a Pokemon name.")
         pkmn = pokemonparser.scan(path, pokemon_name, request.form['lvl'],request.form['hp'],request.form['atk'],request.form['defense'],request.form['spatk'],request.form['spdef'],request.form['speed'],request.form['nature'],)
         if (pkmn is None):
-            raise SnagException("Could not determine Pokemon at all. If you specified a pokemon this is probably a bug.")
+            raise SnagException("Could not determine Pokemon at all. If you specified a pokemon this is probably a bug, or you entered impossible stats.")
         if (pkmn.evs_valid() == False):
             pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
         response = pkmn.__dict__

@@ -25,8 +25,10 @@ def scan(img,
      return parse_pokemon(pokemon)
 
   try:
+    pokemon.msg = ""
     pokemon = parse(img, pokemon)
     if (not pokemon.base_stats_valid()):
+      pokemon.msg = ""
       raise SnagException('Base stats are not valid. Trying again with cropped version.')
   except: 
     pokemon = parse_cropped(img, pokemon)
