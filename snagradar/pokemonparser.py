@@ -25,8 +25,10 @@ def scan(img,
      return parse_pokemon(pokemon)
 
   try:
+    pokemon.msg = ""
     pokemon = parse(img, pokemon)
     if (not pokemon.base_stats_valid()):
+      pokemon.msg = ""
       raise SnagException('Base stats are not valid. Trying again with cropped version.')
   except: 
     pokemon = parse_cropped(img, pokemon)
@@ -88,6 +90,7 @@ def parse(file, pokemon):
    
 def iterate_through_varieties(pokemon, possible_pokemon):
    exception = None
+   possible_varieties = []
    for possible_pkmn in possible_pokemon:
       try:
         pokemon_variety = iterate_through_natures(pokemon, possible_pkmn.stats)
@@ -95,8 +98,13 @@ def iterate_through_varieties(pokemon, possible_pokemon):
           pokemon_variety.name = possible_pkmn.name
           return pokemon_variety
       except SnagException as e:
-         exception = e      
-   raise exception
+         exception = e
+   if (possible_varieties.length == 0):
+     raise exception
+   pokemon_with_lowest_ev_range = min(possible_pkmn, key=lambda x: x.evs_total_range())
+   if (possible_varieties.length > 1):
+      pokemon_with_lowest_ev_range.append_msg("Multiple possible formes found. This one is our best guess. If it's incorrect, please specify the correct forme from the dropdown.")
+   return pokemon_with_lowest_ev_range
 
 def iterate_through_natures(pokemon, stats):
     # I tried writing an OCR script to try and isolate the hex arrows to determine a nature.
@@ -114,6 +122,7 @@ def iterate_through_natures(pokemon, stats):
     nature_affected_stats = ['atk', 'defense', 'spatk', 'spdef', 'speed']
 
     if pokemon.nature != 'null':
+      print("pokemon nature is " + pokemon.nature)
       other_stat_evs = {}
       (nature_up_stat, nature_down_stat) = nature.nature_lookup_reverse(pokemon.nature)
       for stat in nature_affected_stats:
@@ -121,7 +130,7 @@ def iterate_through_natures(pokemon, stats):
       evs_total = hp_evs + sum(other_stat_evs.values())
       if(evs_total > 508):
           return None # Probably a different form
-      acceptable_natures.append([evs_total, nature_up_stat, nature_down_stat, hp_evs, other_stat_evs])  
+      acceptable_natures.append([evs_total, nature_up_stat, nature_down_stat, hp_evs, other_stat_evs])
     else: 
       for nature_up_stat in nature_affected_stats:
           for nature_down_stat in nature_affected_stats:
@@ -146,5 +155,6 @@ def iterate_through_natures(pokemon, stats):
             evs = acceptable_natures[0][4][stat]
             pokemon.evs_total += evs
             setattr(pokemon, 'evs_' + stat, evs)
+        pokemon.cap_ev_ranges()
         return pokemon
     raise SnagException('Multiple Natures possible: Please specify one of: ' + ','.join([nature.NATURES_LOOKUP[(n[1], n[2])] for n in acceptable_natures]))

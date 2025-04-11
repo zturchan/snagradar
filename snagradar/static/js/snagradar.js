@@ -6,6 +6,15 @@ var loadFile = function (event) {
   }
 }
 
+function display_ev_or_range(pokemon, stat){
+  var range = pokemon['evs_range_' + stat];
+  if (range[0] == range[1]){
+    $("#evs_" + stat).text(range[0]);
+  } else {
+    $("#evs_" + stat).text(range[0] + '-' + range[1]);
+  }
+}
+
 $(document).ready(function () {
   
   $(document).on("click", ".clear-button", function(){
@@ -52,17 +61,19 @@ $(document).ready(function () {
         $("#spdef-stat").val(pokemon['spdef']);
         $("#speed-stat").val(pokemon['speed']);
         $("#evs_total").text(pokemon.evs_total);
-        $("#evs_hp").text(pokemon.evs_hp);
-        $("#evs_atk").text(pokemon.evs_atk);
-        $("#evs_defense").text(pokemon.evs_defense);
-        $("#evs_spatk").text(pokemon.evs_spatk);
-        $("#evs_spdef").text(pokemon.evs_spdef);
-        $("#evs_speed").text(pokemon.evs_speed);        
+
+        display_ev_or_range(pokemon, 'hp');
+        display_ev_or_range(pokemon, 'atk');
+        display_ev_or_range(pokemon, 'defense');
+        display_ev_or_range(pokemon, 'spatk');
+        display_ev_or_range(pokemon, 'spdef');
+        display_ev_or_range(pokemon, 'speed');
+
         $("#pokemon-select").val(pokemon.name).change();
         $("#nature").val(pokemon.nature).change();
         $("#lvl").val(pokemon.lvl).change();
         if (pokemon.msg != null && pokemon.msg.length > 0){
-          $('#warning-text').text(pokemon.msg);
+          $('#warning-text').html(pokemon.msg);
           $('#snag-warning').show();
         } else {
           $('#snag-info').show();

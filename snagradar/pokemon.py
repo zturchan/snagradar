@@ -14,13 +14,53 @@ class Pokemon:
     self.evs_spatk = 0
     self.evs_spdef = 0
     self.evs_speed = 0
-    self.evs_total = 0
+    self.evs_range_hp = (0,0)
+    self.evs_range_atk = (0,0)
+    self.evs_range_defense = (0,0)
+    self.evs_range_spatk = (0,0)
+    self.evs_range_spdef = (0,0)
+    self.evs_range_speed = (0,0)
     self.nature = nature
     self.ok = False
     self.msg = ''
-  
+
+  def set_ev_range(self, stat, min, max):
+    match stat:
+      case 'hp':
+        self.evs_range_hp = (min, max)
+      case 'atk':
+        self.evs_range_atk = (min, max)
+      case 'defense':
+        self.evs_range_defense = (min, max)
+      case 'spatk':
+        self.evs_range_spatk = (min, max)
+      case 'spdef':
+        self.evs_range_spdef = (min, max)
+      case 'speed':
+        self.evs_range_speed = (min, max)
+
+  def cap_ev_ranges(self):
+    # EV ranges should not imply that EVs could be added that would exceed 510.
+    unaccounted_for_evs = 510 - self.evs_hp - self.evs_atk - self.evs_defense - self.evs_spatk - self.evs_spdef - self.evs_speed
+    self.evs_range_hp = (self.evs_range_hp[0], min(self.evs_range_hp[1], self.evs_range_hp[0] + unaccounted_for_evs))
+    self.evs_range_atk = (self.evs_range_atk[0], min(self.evs_range_atk[1], self.evs_range_atk[0] + unaccounted_for_evs))
+    self.evs_range_defense = (self.evs_range_defense[0], min(self.evs_range_defense[1], self.evs_range_defense[0] + unaccounted_for_evs))
+    self.evs_range_spatk = (self.evs_range_spatk[0], min(self.evs_range_spatk[1], self.evs_range_spatk[0] + unaccounted_for_evs))
+    self.evs_range_spdef = (self.evs_range_spdef[0], min(self.evs_range_spdef[1], self.evs_range_spdef[0] + unaccounted_for_evs))
+    self.evs_range_speed = (self.evs_range_speed[0], min(self.evs_range_speed[1], self.evs_range_speed[0] + unaccounted_for_evs))
+
+  def evs_total_range(self):
+    # This is mostly just a measure of how confident we are that this pokemon representation is correct.
+    # If this = 0, it's absolutely correct. The bigger it is, the less certain we are about the specifics of the pokemon.
+    return ((self.evs_range_hp[1] - self.evs_range_hp[0]) +
+      (self.evs_range_atk[1] - self.evs_range_atk[0]) +
+      (self.evs_range_defense[1] - self.evs_range_defense[0]) +
+      (self.evs_range_spatk[1] - self.evs_range_spatk[0]) +
+      (self.evs_range_spdef[1] - self.evs_range_spdef[0]) +
+      (self.evs_range_speed[1] - self.evs_range_speed[0]))
+
   def append_msg(self, msg):
-    self.msg += msg + '\r\n'
+    self.msg += msg + '<br/>'
 
   def evs_valid(self):
     valid = (self.base_stats_valid() == True and
@@ -50,8 +90,7 @@ class Pokemon:
       return True
     print("BASE STATS INVALID:")
     print(self)
-    return False
-  
+    return False  
   
   def nature_valid(self):
     valid = self.nature is not None and self.is_valid()
