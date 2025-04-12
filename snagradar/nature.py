@@ -1,6 +1,6 @@
 #Increased stat, decreased stat
 NATURES_LOOKUP = {
-    ('',''): 'Hardy',
+    ('atk','atk'): 'Hardy',
     ('atk','defense'): 'Lonely',
     ('atk','speed'): 'Brave',
     ('atk','spatk'): 'Adamant',

@@ -2,10 +2,11 @@ import evs_calculator
 import pokebase as pb
 import nature
 import process
+import copy
 from pokemon import Pokemon
 from processocrspace import run_ocr
 from ocr_parser import parse_ocr_output
-from snagexception import SnagException
+from snagexception import SnagException, SkipNatureException
 
 def scan(img,
          pokemon_name,
@@ -19,22 +20,29 @@ def scan(img,
          nature):
   # Make a pokemon object with any of the data supplied by user already before looking at the picture 
   pokemon = Pokemon(pokemon_name, lvl, hp, atk, defense, spatk, spdef, speed, nature)
-  if (pokemon.nature_valid and pokemon.base_stats_valid()):
+  print("Pokemon based on user input, pre-OCR:")
+  print(pokemon)
+  if (pokemon.nature_valid() and pokemon.base_stats_valid()):
      # Don't bother trying to do any OCR if the user has already told us everything we would get
      # from an image
+     print("User-supplied stats mean we don't need an image. Returning early...")
      return parse_pokemon(pokemon)
-
+  print("User-supplied stats were insufficient, trying initial scan.")
   try:
-    pokemon.msg = ""
     pokemon = parse(img, pokemon)
+    print("Initial scan complete and successful, no need to crop.")
     if (not pokemon.base_stats_valid()):
-      pokemon.msg = ""
       raise SnagException('Base stats are not valid. Trying again with cropped version.')
   except: 
-    pokemon = parse_cropped(img, pokemon)
-  print('=====SCANNED STATS=====')
+    print("After failed initial scan, Pokemon is:")
+    print(pokemon)
+    print("Secondary scan starting, cropping and scanning again.")
+    cropped_pokemon = parse_cropped(img, pokemon)
+    if(cropped_pokemon is not None and cropped_pokemon.evs_valid()):
+       # Only use the results of the crop if it's actually valid, otherwise go with what we've got.
+       pokemon = cropped_pokemon
+  print('=====FINAL SCANNED STATS=====')
   print(pokemon)
-  print('=====CALCULATED STATS=====')
   return parse_pokemon(pokemon)
 
 def determine_identifier_from_in_game_name(name):
@@ -115,46 +123,48 @@ def iterate_through_natures(pokemon, stats):
     
     pokemon.evs_hp = hp_evs
     pokemon.evs_total = pokemon.evs_hp
-    other_stat_evs = {}
     
-    acceptable_natures = []
+    acceptable_natures = [] # Contains a separate pokemon object for each possible valid nature
     
     nature_affected_stats = ['atk', 'defense', 'spatk', 'spdef', 'speed']
 
     if pokemon.nature != 'null':
-      print("pokemon nature is " + pokemon.nature)
-      other_stat_evs = {}
       (nature_up_stat, nature_down_stat) = nature.nature_lookup_reverse(pokemon.nature)
-      for stat in nature_affected_stats:
-        other_stat_evs[stat] = evs_calculator.calculate_non_hp_evs(pokemon, stats, [nature_up_stat, nature_down_stat], stat)
-      evs_total = hp_evs + sum(other_stat_evs.values())
-      if(evs_total > 508):
+      try:
+        for stat in nature_affected_stats:
+          evs_calculator.calculate_non_hp_evs(pokemon, stats, [nature_up_stat, nature_down_stat], stat)
+      except SkipNatureException:
+        return None #The user fed us a nature that results in an impossible pokemon.
+      if(not pokemon.evs_valid()):
           return None # Probably a different form
-      acceptable_natures.append([evs_total, nature_up_stat, nature_down_stat, hp_evs, other_stat_evs])
+      pokemon.cap_ev_ranges()
+      acceptable_natures.append(pokemon)
     else: 
       for nature_up_stat in nature_affected_stats:
           for nature_down_stat in nature_affected_stats:
-              if(nature_down_stat == nature_up_stat):
+              if(nature_down_stat == nature_up_stat and nature_up_stat != 'atk'):
+                  # only need to check the neutral nature once, not 5 times
                   continue
-              other_stat_evs = {}
-              for stat in nature_affected_stats:
-                  other_stat_evs[stat] = evs_calculator.calculate_non_hp_evs(pokemon, stats, [nature_up_stat, nature_down_stat], stat)
-              evs_total = hp_evs + sum(other_stat_evs.values())
-              if(evs_total > 508):
+              candidate_nature = nature.NATURES_LOOKUP[nature_up_stat, nature_down_stat]
+              pokemon_copy_for_nature = copy.deepcopy(pokemon)
+              pokemon_copy_for_nature.nature = candidate_nature
+              try:
+                for stat in nature_affected_stats:
+                  evs_calculator.calculate_non_hp_evs(pokemon_copy_for_nature, stats, [nature_up_stat, nature_down_stat], stat)
+              except SkipNatureException:
+                 # one of the stats exceeded 252, so this entire nature should be thrown out
+                 continue                    
+              if(not pokemon_copy_for_nature.evs_valid()):
                   # This nature is invalid, so try the next one.
-                  continue;
-              acceptable_natures.append([evs_total, nature_up_stat, nature_down_stat, hp_evs, other_stat_evs])
+                  continue
               
-    for acceptable_nature in acceptable_natures:
-        for stat in ['atk', 'defense', 'spatk', 'spdef', 'speed']:
-            evs = acceptable_nature[4][stat]
+              pokemon_copy_for_nature.cap_ev_ranges()
+              acceptable_natures.append(pokemon_copy_for_nature)
+    
     if(len(acceptable_natures) == 1):
-        mynature = acceptable_natures[0]
-        pokemon.nature = nature.NATURES_LOOKUP[(mynature[1], mynature[2])]
-        for stat in ['atk', 'defense', 'spatk', 'spdef', 'speed']:
-            evs = acceptable_natures[0][4][stat]
-            pokemon.evs_total += evs
-            setattr(pokemon, 'evs_' + stat, evs)
-        pokemon.cap_ev_ranges()
-        return pokemon
-    raise SnagException('Multiple Natures possible: Please specify one of: ' + ','.join([nature.NATURES_LOOKUP[(n[1], n[2])] for n in acceptable_natures]))
+        return acceptable_natures[0]
+    if(len(acceptable_natures) > 1):
+       best_guess_pokemon =  min(acceptable_natures, key=lambda x: x.evs_total_range())
+       best_guess_pokemon.msg = 'Multiple Natures possible: Please specify one of: ' + ', '.join(p.nature for p in acceptable_natures) + "."
+       return best_guess_pokemon
+    return None

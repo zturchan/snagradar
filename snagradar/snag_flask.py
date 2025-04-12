@@ -44,7 +44,6 @@ def create_app():
 
     @app.route('/scan_ajax', methods=['POST'])
     def scan_ajax():
-        print(request)
         pokemon_name = request.form["pokemon-select"] if "pokemon-select" in request.form else None
         img = request.files["image"]
 
@@ -57,9 +56,10 @@ def create_app():
         else:
             if (pokemon_name is None or pokemon_name == 'null'):
                 raise SnagException("You must supply an image or select a Pokemon name.")
+        print ("About to start scanning:")
         pkmn = pokemonparser.scan(path, pokemon_name, request.form['lvl'],request.form['hp'],request.form['atk'],request.form['defense'],request.form['spatk'],request.form['spdef'],request.form['speed'],request.form['nature'],)
         if (pkmn is None):
-            raise SnagException("Could not determine Pokemon at all. If you specified a pokemon this is probably a bug, or you entered impossible stats.")
+            raise SnagException("Could not construct a Pokemon that matches these stats. Double check that you entered any stats/level/nature correctly, or make a github issue if you are sure you've entered valid data.")
         if (pkmn.evs_valid() == False):
             pkmn.msg = "Some stats could not be scanned - please manually enter the missing values and re-scan."
         response = pkmn.__dict__

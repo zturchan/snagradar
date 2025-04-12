@@ -6,13 +6,13 @@ def parse_ocr_output(output, pokemon):
     # Happens if the crop failed and didn't get us a good screengrab
     return pokemon
   chunks = output.split('\n')
-  lvl = 0
-  hp = 0
-  atk = 0
-  spatk = 0
-  speed = 0
-  spdef = 0
-  defense = 0
+  lvl = ''
+  hp = ''
+  atk = ''
+  spatk = ''
+  speed = ''
+  spdef = ''
+  defense = ''
   name = ''
   
   expecting_name_chunk = False
@@ -37,7 +37,7 @@ def parse_ocr_output(output, pokemon):
       expecting_name_chunk = False
       continue
 
-    lvl_match = re.search('[LI][vxy].*?(\d+)', chunk, re.IGNORECASE)
+    lvl_match = re.search(r'[LI][vxy].*?(\d+)', chunk, re.IGNORECASE)
     if(lvl_match):
       lvl = lvl_match.group(1)
       continue
@@ -47,7 +47,7 @@ def parse_ocr_output(output, pokemon):
       expecting_hp_chunk = True
       continue
     if(expecting_hp_chunk):
-      hp_value_match = re.search('\d+\/(\d+)', chunk)
+      hp_value_match = re.search(r'\d+\/(\d+)', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (hp_value_match):
         hp = hp_value_match.group(1)
@@ -56,36 +56,36 @@ def parse_ocr_output(output, pokemon):
     
     # This is for OCRSpace format
     # sometimes the t in atk is parse as l
-    spatk_match = re.search('.*Sp.A[tl]k.*', chunk)
+    spatk_match = re.search(r'.*Sp.A[tl]k.*', chunk)
     if(spatk_match):
        expecting_spatk_chunk = True
        continue
     if(expecting_spatk_chunk):
-      spatk_value_match = re.search('.*?(\d+).*?$', chunk)
+      spatk_value_match = re.search(r'.*?(\d+).*?$', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (spatk_value_match):
         spatk = spatk_value_match.group(1)
         expecting_spatk_chunk = False
       continue
       
-    atk_match = re.search('.*?A[tl][tl]a[ckd].*?$', chunk)
+    atk_match = re.search(r'.*?A[tl][tl]a[ckd].*?$', chunk)
     if(atk_match):
        expecting_atk_chunk = True
        continue
     if(expecting_atk_chunk):
-      atk_value_match = re.search('.*?(\d+).*?$', chunk)
+      atk_value_match = re.search(r'.*?(\d+).*?$', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (atk_value_match):
         atk = atk_value_match.group(1)
         expecting_atk_chunk = False
       continue
       
-    spdef_match = re.search('.*?Sp.De[lf].*?', chunk)
+    spdef_match = re.search(r'.*?Sp.De[lf].*?', chunk)
     if(spdef_match):
        expecting_spdef_chunk = True
        continue
     if(expecting_spdef_chunk):
-      spdef_value_match = re.search('.*?(\d+).*$', chunk)
+      spdef_value_match = re.search(r'.*?(\d+).*$', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (spdef_value_match):
         spdef = spdef_value_match.group(1)
@@ -97,7 +97,7 @@ def parse_ocr_output(output, pokemon):
        expecting_def_chunk = True
        continue
     if(expecting_def_chunk):
-      def_value_match = re.search('.*?(\d+).*?$', chunk)
+      def_value_match = re.search(r'.*?(\d+).*?$', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (def_value_match):
         defense = def_value_match.group(1)
@@ -109,28 +109,22 @@ def parse_ocr_output(output, pokemon):
       expecting_speed_chunk = True
       continue
     if(expecting_speed_chunk):
-      speed_value_match = re.search('(\d+)', chunk)
+      speed_value_match = re.search(r'(\d+)', chunk)
       # If we find the value we're looking for, log it. If not, continue as this chunk might be noise
       if (speed_value_match):
         speed = speed_value_match.group(1)
         expecting_speed_chunk = False
       continue  
-    
+  print("DEBUG - parsing hp = " + str(pokemon.hp))
+
   if pokemon.name == 'null':
     pokemon.name = name
-  if pokemon.lvl is None and int(lvl) > 0:
-    pokemon.lvl = int(lvl)
-  if pokemon.hp is None and int(hp) > 0:
-    pokemon.hp = int(hp)
-  if pokemon.atk is None and int(atk) > 0:
-    pokemon.atk = int(atk)
-  if pokemon.defense is None and int(defense) > 0:
-    pokemon.defense = int(defense)
-  if pokemon.spatk is None and int(spatk) > 0:
-    pokemon.spatk = int(spatk)
-  if pokemon.spdef is None and int(spdef) > 0:
-    pokemon.spdef = int(spdef)
-  if pokemon.speed is None and int(speed) > 0:
-    pokemon.speed = int(speed)
+  pokemon.set_stat('lvl', lvl)
+  pokemon.set_stat('hp', hp)
+  pokemon.set_stat('atk', atk)
+  pokemon.set_stat('defense', defense)
+  pokemon.set_stat('spatk', spatk)
+  pokemon.set_stat('spdef', spdef)
+  pokemon.set_stat('speed', speed)
 
   return pokemon

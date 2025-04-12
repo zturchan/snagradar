@@ -15,6 +15,15 @@ function display_ev_or_range(pokemon, stat){
   }
 }
 
+function evs_minimum_total(pokemon){
+  var total = 0;
+  stats = ['hp','atk','defense','spatk','spdef','speed']
+  for(var i in stats){
+    total += pokemon['evs_range_' + stats[i]][0];
+  }
+  return total;
+}
+
 $(document).ready(function () {
   
   $(document).on("click", ".clear-button", function(){
@@ -22,6 +31,10 @@ $(document).ready(function () {
       $(this).val("");
     });
     $("#preview").attr("src", "");
+  });
+
+  $(document).on("click", "#nature-clear", function(){
+    $("#nature").val('');
   });
 
   $("form#form").submit(function (e) {
@@ -60,7 +73,7 @@ $(document).ready(function () {
         $("#spatk-stat").val(pokemon['spatk']);
         $("#spdef-stat").val(pokemon['spdef']);
         $("#speed-stat").val(pokemon['speed']);
-        $("#evs_total").text(pokemon.evs_total);
+        $("#evs_total").text(evs_minimum_total(pokemon));
 
         display_ev_or_range(pokemon, 'hp');
         display_ev_or_range(pokemon, 'atk');

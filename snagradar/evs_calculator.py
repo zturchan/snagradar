@@ -1,4 +1,6 @@
 import math
+import nature
+from snagexception import SkipNatureException, SnagException
 
 def get_closest_multiple_of_4_not_higher(val):
   # The stat calculation formula uses some math.floor operations when calculating the resulting stat
@@ -24,8 +26,10 @@ def calculate_hp_evs(pokemon, stats):
   if (evs_guess < 0):
     evs_guess = 0
   evs_guess = get_closest_multiple_of_4_not_higher(evs_guess)    
-  
-  return backtest_hp_evs(pokemon, int(pokemon.hp), hp_base, evs_guess)
+  evs = backtest_hp_evs(pokemon, int(pokemon.hp), hp_base, evs_guess)
+  if (evs > 252):
+    raise SnagException("The supplied HP stat [" + pokemon.hp + "] would result in more than 252 EVs, which is impossible. Ensure your input is correct.")
+  return evs
   
 # stat calcs
 # https://bulbapedia.bulbagarden.net/wiki/Stat#Example_2  
@@ -98,10 +102,14 @@ def determine_non_hp_stat_value_from_evs(lvl, base_stat, nature_factor, stat, ev
   return math.floor(g)
   
 def get_nature_modifier(nature_modified_stats, stat_name):
+  if(nature_modified_stats[0] == nature_modified_stats[1]):
+    # Neutral nature
+    return 1
   if(nature_modified_stats[0] == stat_name):
     return 1.1
   if(nature_modified_stats[1] == stat_name):
     return 0.9
+  # This particular stat is not affected by this nature
   return 1
   
 def get_base_stat(stats, stat_name):
@@ -112,8 +120,9 @@ def get_base_stat(stats, stat_name):
     stat_name = 'special-attack'
   if (stat_name == 'spdef'):
     stat_name = 'special-defense'
+
   return list(filter(lambda x : x.stat.name == stat_name, stats))[0].base_stat
-  
+
 def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   # assume hypertrained/max ivs
   nature_factor = get_nature_modifier(nature_modified_stats, stat)
@@ -121,10 +130,12 @@ def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   base_stat = get_base_stat(stats, stat)
 
   iv = 31
-  real_stat = int(getattr(pokemon, stat))
+  real_stat = getattr(pokemon, stat)
+  real_stat = int(real_stat) if isinstance(real_stat, int) else None
   if (real_stat is None):
     # We don't have a stat detected, return 0
     return 0
+  
   a = real_stat / nature_factor
   b = a - 5
   c = b * 100
@@ -132,9 +143,10 @@ def calculate_non_hp_evs(pokemon, stats, nature_modified_stats, stat):
   e = d - 2 * base_stat
   f = e - iv
   evs_guess = math.floor(4 * f)
-    
   # Might appear negative due to the destructive math.floor usages. Set guess to zero and then backtest to confirm.
   if (evs_guess < 0):
     evs_guess = 0
   evs_guess = get_closest_multiple_of_4_not_higher(evs_guess)
-  return backtest_non_hp_evs(pokemon, real_stat, base_stat, nature_factor, stat, evs_guess)
+  evs = backtest_non_hp_evs(pokemon, real_stat, base_stat, nature_factor, stat, evs_guess)
+  if(evs > 252):
+    raise SkipNatureException(nature.NATURES_LOOKUP[(nature_modified_stats[0], nature_modified_stats[1])])
