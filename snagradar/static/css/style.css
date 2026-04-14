@@ -123,3 +123,19 @@ footer a:hover{
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.major-text{
+  font-size: 30pt;
+}
+
+.minor-text{
+  font-size: 10pt;
+}
+
+.speedle .buttons-container{
+  padding-top: 30px;
+}
+
+.speedle button{
+  width: 100%;
+}
