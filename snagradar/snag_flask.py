@@ -72,7 +72,7 @@ def create_app():
             cleanup(path)
         return response
 
-    @app.route('/howitworks', methods=['GET'])
+    @app.route('/scan_documentation', methods=['GET'])
     def how_it_works():
         return render_template('howitworks.html')
     return app
