@@ -1,5 +1,6 @@
 import os
 import pokemonparser
+from speedle import generate_todays_challenge
 from flask import Flask, render_template, request, jsonify
 from pokemon import Pokemon
 from snagexception import SnagException
@@ -79,4 +80,10 @@ def create_app():
     @app.route('/scan_documentation', methods=['GET'])
     def how_it_works():
         return render_template('howitworks.html')
+
+    @app.route("/speedle_roster", methods=["GET"])
+    def speedle_roster():
+        challenge_set = generate_todays_challenge()
+        return render_template("roster.html", challenge=challenge_set)
+
     return app

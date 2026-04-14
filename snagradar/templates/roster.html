@@ -1,0 +1,20 @@
+{% extends 'snagradar.html' %}
+{% block content %}
+<div class="container gx-3 py-3 mt-3">
+    {% for p in challenge %}
+    <table class="challenge">
+        <thead>
+            <th>Player</th>
+            <th>Villain</th>
+        </thead>
+        <tr>
+            {% autoescape false %}
+            <td>{{p[0]}}</td>
+            <td>{{p[1]}}</td>
+            {% endautoescape %}
+        </tr>
+    </table>
+    <br />
+    {% endfor %}
+</div>
+{% endblock %}
