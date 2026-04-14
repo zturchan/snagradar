@@ -25,6 +25,10 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('index.html')
+    
+    @app.route('/speedle')
+    def speedle():
+        return render_template('speedle.html', page='speedle')
 
     @app.route('/scan')
     def snagradar():
