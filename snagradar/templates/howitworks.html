@@ -6,17 +6,17 @@
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-                    What does Silph Scope do?
+                    What does Silph Scope EV Scanner do?
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Simply put, Silph Scope uses the visisble stats from a Pokemon in Pokemon Scarlet/Violet and
+                    Simply put, the EV Scanner uses the visisble stats from a Pokemon in Pokemon Scarlet/Violet and
                     calculates their hidden EV values.
                     A rough estimate of these values is available by viewing the "Judge" feature in game, but that
                     doesn't give you the exact values.
                     </br /><br />
-                    I made Silph Scope as a tool for helping me manage the hundreds of competitive Pokemon I've made
+                    I made this as a tool for helping me manage the hundreds of competitive Pokemon I've made
                     over the years. As someone who tries new teams all the time, I found myself wanting to know
                     what the EVs were on any of my dozens of Incineroars, but inputting their stats manually into
                     Showdown was too tedious. Knowing the exact EVs will let you decide if you want to use a specific
@@ -44,12 +44,12 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    How do I use Silph Scope?
+                    How do I use Silph Scope's EV Scanner?
                 </button>
             </h2>
             <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Silph scope aims to be as flexible as possible, and will try to work with whatever you give it. You
+                    EV Scanner aims to be as flexible as possible, and will try to work with whatever you give it. You
                     can scan based on any of the following:
                     <ul>
                         <li>Manually typed in stats. Select the Pokemon, level, 6 stat values, and nature and click
@@ -83,7 +83,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    What does Silph Scope require to work?
+                    What does the EV Scanner require to work?
                 </button>
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -92,7 +92,7 @@
                     <ul>
                         <li>If uploading a photo, try and access the stats screen from the Boxes screen. If you use the
                             party in the overworld, the background may cause issues with the scan.</li>
-                        <li>Silph Scope requires your game to be in <b>English</b>. Other languages are not supported.
+                        <li>EV Scanner requires your game to be in <b>English</b>. Other languages are not supported.
                             If you use a picture or screenshot of a non-English Pokemon, you will need to specify the
                             Pokemon species using the dropdown.</li>
                         <li>Similarly, if your Pokemon has a nickname, you will need to specify the Pokemon species
@@ -111,7 +111,7 @@
             </h2>
             <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Silph Scope is a simple Python 3 Flask App. I used the following to make it work.
+                    Silph Scope (and EV Scanner) is a simple Python 3 Flask App. I used the following to make it work.
                     <ul>
                         <li>Python 3.12 (main application language)</li>
                         <li><a href="https://pokeapi.co/" target="_blank">PokeAPI</a> and the <a href="https://github.com/PokeAPI/pokebase" target="_blank">PokeBase</a> wrapper for getting all the Pokemon data.</li>
@@ -132,8 +132,9 @@
             </h2>
             <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Silph Scope is still a work in progress. Feel free to create an issue in the <a href="https://github.com/zturchan/snagradar" target="_blank">GitHub Repo</a>, message me on 
-                    <a href="https://bsky.app/profile/zturchan.bsky.social" target="_blank">BlueSky</a>, or message me on Discord (username zturchan). I can't guaruntee I'll get to your issue right away, but I appreciate any and all feedback.
+                    Feel free to create an issue in the <a href="https://github.com/zturchan/snagradar" target="_blank">GitHub Repo</a>, message me on 
+                    <a href="https://bsky.app/profile/zturchan.bsky.social" target="_blank">BlueSky</a>, or message me on Discord (username zturchan).
+                    I can't guaruntee I'll get to your issue right away, but I appreciate any and all feedback.
                 </div>
             </div>
         </div>
@@ -165,7 +166,25 @@
             </h2>
             <div id="collapseEight" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Assuming that I'm able to, I plan to continue adding support for whatever game the current VGC circuit uses.
+                    My focus will be on whatever games are used for the current VGC circuit. EV Scanner will continue to be offerred for Scarlet and Violet so long as this site remains up.
+                    Champions does not need an EV Scanner since stat values are explicitly specified in-game.
+                    I do not plan to support gen 10 in the same way, as VGC will be played on Pokemon Champions.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                    Does Silph Scope use Generative AI?
+                </button>
+            </h2>
+            <div id="collapseNine" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Silph Scope's code base was written entirely by hand my me. I do not plan to use GenAI in any of my code or assets for both ethical and technical reasons.
+                    I cannot guaruntee that the same holds true for third-party packages this site may use. OpenCV which is used for image scanning is a traditional machine-learning library,
+                    and is not generative AI in the sense that the term is used today.
                 </div>
             </div>
         </div>
