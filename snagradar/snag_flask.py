@@ -23,6 +23,10 @@ def create_app():
         pass
 
     @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    @app.route('/scan')
     def snagradar():
         pkmn = Pokemon('', 0,0,0,0,0,0,0) 
 
