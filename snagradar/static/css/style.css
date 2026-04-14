@@ -139,3 +139,15 @@ footer a:hover{
 .speedle button{
   width: 100%;
 }
+
+table.challenge{
+  width: 100%;
+}
+
+table.challenge td{
+  width: 50%;
+  vertical-align: top;
+}
+table.challenge th{
+  font-weight: bold;
+}
