@@ -1,1 +1,1 @@
-flask --app snag_flask run --host=0.0.0.0 --port=80
+flask --app snag_flask run --host=0.0.0.0 --port=8000 --debug
