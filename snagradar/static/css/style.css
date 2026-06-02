@@ -139,6 +139,9 @@ footer a:hover{
 .speedle button{
   width: 100%;
 }
+div.challenge-container {
+  display:none;
+}
 
 table.challenge{
   width: 100%;
@@ -147,7 +150,57 @@ table.challenge{
 table.challenge td{
   width: 50%;
   vertical-align: top;
+  text-align: center;
 }
+
 table.challenge th{
+  text-align: center;
   font-weight: bold;
+  font-size: 30pt;
+}
+
+img.pokemon{
+  width: 500px;
+}
+
+table.buttons button{
+  font-weight: bold;
+  font-size: 24pt;
+  width:100%;
+}
+
+table.buttons td.button-cell{
+  width:33%;
+}
+
+span.nature-desc{
+  text-decoration-style: dotted;
+  text-decoration-line: underline;
+}
+
+.daily-record{
+  text-align: center;
+}
+
+.ball{
+  width: 50px
+}
+
+.ball.default{
+ filter: opacity(50%) grayscale(80%);
+}
+
+.ball.wrong{
+ filter: grayscale(100%);
+}
+
+#daily-summary{
+  display:none;
+  text-align: center;
+  font-size: 22pt;
+  font-weight: bold;
+}
+
+button.share{
+  margin-left: 5px;
 }
