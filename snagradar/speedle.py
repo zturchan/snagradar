@@ -1,6 +1,6 @@
-import pokebase as pb
 import os
 import random
+import aiopoke
 
 NUMBER_OF_BATTLES = 10
 CHANCE_ONE_PLAYER_IN_TAILWIND = (
@@ -44,37 +44,85 @@ class SpeedleMon:
             summary += "In Tailwind (2x speed)"
         return summary
 
+    async def load_api_values(self):
+        # PokeAPI values
+        async with aiopoke.AiopokeClient() as client:
+            pokemon = await client.get_pokemon(self.api_name)
+            self.species = pokemon.species.name
+            self.sprite = get_sprite_path(self)
 
-def read_speed_list_from_file(filename):
+def get_sprite_path(pokemon):
+    folder = IMAGES_FILEPATH if not pokemon.is_mega else IMAGES_FILEPATH + IMAGES_MEGAS_SUBFOLDER
+    # Normal sprites have filename "XXXX Name Form.png"
+    # - XXXX is the pokemon number and can be ignored - it's just a relic from the download pack I used
+    # - Form is optional
+    # - Megas are contained in the megas subfolder, and use the same naming scheme except they do not have the number.
+
+    try:
+        if (pokemon.is_mega):
+            return folder + "/" + pokemon.species.replace("-", " ") + ".png"
+        if (pokemon.species.lower() != pokemon.api_name.lower()):
+            # This means we're an alternate form, but not a mega
+            file_stem = pokemon.api_name.replace("-", " ")
+            pokemon.app.logger.info(f"filestem = {file_stem}")
+
+            pattern = f"*{file_stem}.png"
+            pokemon.app.logger.info(f"pattern is {pattern}")
+            sprite = sorted(pathlib.Path(folder).glob(pattern, case_sensitive=False))[0]
+            return sprite
+        pattern = f"*{pokemon.species}.png"
+        sprite = sorted(pathlib.Path(folder).glob(pattern, case_sensitive=False))[0]
+        return sprite
+    except:
+        pokemon.app.logger.error(f"Could not get sprite for {pokemon.api_name}")
+    return "notfound.png"
+
+
+async def read_speed_list_from_file(filename, app):
     # Expects a csv file containing the name of a pokemon and it's speed. One pokemon per row.
     pokemon = []
-
     with open(filename) as f:
         for line in f:
-            name, speed = line.split(",")
-            pokemon.append(SpeedleMon(name, speed))
+            line = line.strip()
+            if (len(line) == 0):
+                continue
+            parts = line.split(",")
+            name = parts[0]
+            speed = int(parts[1])
+            api_name = None
+            if (len(parts) > 2):
+                api_name = parts[2]
+            newMon = SpeedleMon(name, speed, app=app, api_name=api_name)
+
+            pokemon.append(newMon)
     return pokemon
 
-
-def get_regulation_roster():
+async def get_regulation_roster(app):
     # todo, grab these from a DB or something
     path = r"H:\Projects\snagradar\snagradar\speedle\ma-speed-list"
-    return read_speed_list_from_file(path)
+    return await read_speed_list_from_file(path, app)
 
+def get_player_and_villain_teams(roster):
+    # We don't want any overlaps of species so we pull all 20 mons at once.
+    pokemon = random.sample(roster, NUMBER_OF_BATTLES * 2)
+    return pokemon[:10], pokemon[10:]
 
-def get_random_mons(roster, x):
-    return random.sample(roster, x)
-
-
-def generate_todays_challenge():
+async def generate_todays_challenge(flaskapp):
+    app = flaskapp
     # Generate 10 pokemon for us, and then 10 for the villain.
 
-    roster = get_regulation_roster()
-    player_pokemon_set = get_random_mons(roster, NUMBER_OF_BATTLES)
-    villain_pokemon_set = get_random_mons(roster, NUMBER_OF_BATTLES)
+    roster = await get_regulation_roster()
+    player_pokemon_set, villain_pokemon_set = get_player_and_villain_teams(roster)
 
-    challenge = []
-    for i in range(10):
+    for player_mon in player_pokemon_set:
+        await player_mon.load_api_values()
+    for villain_mon in villain_pokemon_set:
+        await villain_mon.load_api_values()
+        # Villain mons could have any speed value
+        villain_mon.speed_stat_points = None
+
+    challenges = []
+    for i in range(len(player_pokemon_set)):
         player_pokemon = player_pokemon_set[i]
         villain_pokemon = villain_pokemon_set[i]
 
