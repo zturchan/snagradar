@@ -1,6 +1,8 @@
-import os
 import random
 import aiopoke
+import pathlib
+import constants
+from challenge import Challenge
 
 NUMBER_OF_BATTLES = 10
 CHANCE_ONE_PLAYER_IN_TAILWIND = (
