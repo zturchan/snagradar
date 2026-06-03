@@ -97,9 +97,9 @@ def create_app():
     def how_it_works():
         return render_template("howitworks.html")
 
-    @app.route("/speedle_roster", methods=["GET"])
-    def speedle_roster():
-        challenge_set = generate_todays_challenge()
+    @app.route("/daily_challenge", methods=["GET"])
+    async def daily_challenge():
+        challenge_set = await generate_todays_challenge(app)
         return render_template("roster.html", challenge=challenge_set)
 
     return app
