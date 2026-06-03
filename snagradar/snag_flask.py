@@ -100,6 +100,6 @@ def create_app():
     @app.route("/daily_challenge", methods=["GET"])
     async def daily_challenge():
         challenge_set = await generate_todays_challenge(app)
-        return render_template("roster.html", challenge=challenge_set)
+        return render_template("daily.html", challenge=challenge_set)
 
     return app
