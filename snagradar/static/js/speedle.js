@@ -1,5 +1,5 @@
 function pacific_time(date) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: 'America/Vancouver'}));   
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: 'America/Vancouver'}));
 }
 
 function now_pt(){
@@ -43,9 +43,9 @@ async function toast(text, is_correct){
     await Toastify({
   text: text,
   duration: duration,
-  gravity: "top", 
+  gravity: "top",
   position: "center",
-  stopOnFocus: true, 
+  stopOnFocus: true,
   style: {
     background: background,
   },
@@ -67,11 +67,7 @@ async function setClipboard(text) {
   await navigator.clipboard.write([clipboardItem]);
 }
 
-
-
 window.onload = (event) => {
-    
-
     let matches = document.querySelectorAll(".challenge-container");
 
     matches[0].style.display = "block";
@@ -113,7 +109,6 @@ window.onload = (event) => {
                         if (current_index == 10){
                             const correct_answers = user_score.filter(x => x === true).length;
 
-
                             summary = document.getElementById("daily-summary");
 
                             let score = document.createElement("p");
@@ -125,7 +120,6 @@ window.onload = (event) => {
                             share.append("Share")
                             score.append(share);
                             summary.append(score);
-                            
 
                             let result = document.createElement("p");
 
@@ -141,14 +135,14 @@ window.onload = (event) => {
                             else {
                                 result.append("You're light-years away from beating Brock.");
                             }
-                            
+
                             summary.append(result);
-                            
+
                             let play_tomorrow = document.createElement("p");
                             play_tomorrow.append("You can play tomorrow's challenge in:");
                             play_tomorrow.append(get_time_until_next_midnight_pacific());
                             summary.append(play_tomorrow);
-                            
+
 
                             summary.style.display = "block";
                         }
