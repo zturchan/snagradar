@@ -12,12 +12,12 @@ function today_pt(){
 
 function result_text(result){
     switch(Number(result)){
-        case -1: 
+        case -1:
+            return "Never outspeeds";
+        case 0:
+            return "Sometimes outspeeds";
+        case 1:
             return "Always outspeeds";
-        case 0: 
-            return "Sometimes outspeeds";
-        case 1: 
-            return "Sometimes outspeeds";
         default:
             return "Something went wrong!";
     }
