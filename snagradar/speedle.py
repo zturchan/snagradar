@@ -135,6 +135,7 @@ async def generate_todays_challenge(flaskapp):
         villain_pokemon.tailwind = any_tailwind and not player_pokemon.tailwind
 
         player_pokemon.beneficial_nature = random.random() <= CHANCE_PLUS_SPEED_NATURE
+        villain_pokemon.beneficial_nature = random.random() <= CHANCE_PLUS_SPEED_NATURE
 
         # TODO: Allow for other sensible values besides 0 and max, probably species-specific
         player_pokemon.speed_stat_points = (
