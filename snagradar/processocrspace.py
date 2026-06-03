@@ -2,7 +2,7 @@
 import ocrspace
 import os
 import math
-from constants import OCRSPACE_API_KEY
+from keys import OCRSPACE_API_KEY
 from PIL import Image
 
 OCRSPACE_FILESIZE_LIMIT_KB = 1024
@@ -30,8 +30,8 @@ def run_ocr(filename):
   filesize_in_kb = filesize_in_bytes / 1000
 
   if (filesize_in_kb > OCRSPACE_FILESIZE_LIMIT_KB):
-    # Downscale the image to fit the size requirements. 
-    factor_bigger = filesize_in_kb / OCRSPACE_FILESIZE_LIMIT_KB 
+    # Downscale the image to fit the size requirements.
+    factor_bigger = filesize_in_kb / OCRSPACE_FILESIZE_LIMIT_KB
     print("Image uploaded was " + str(filesize_in_kb) + "KB, resizing.")
     filename = compress_image_for_ocr(filename, factor_bigger)
     print("Resized File at " + str(filename))
