@@ -33,8 +33,15 @@ function get_time_until_next_midnight_pacific(){
     return new Date(1000 * secondsUntilEndOfDate).toISOString().substr(11, 8);
 }
 
+function toggle_answer_buttons(enabled){
+    document.querySelectorAll("table.buttons button").forEach(function(button){
+        button.classList.toggle("disabled");
+    });
+}
+
 async function toast(text, is_correct){
-    let background = is_correct ? 
+    toggle_answer_buttons(false);
+    let background = is_correct ?
     "linear-gradient(to left, rgb(0, 255, 0), #185f22)"
     : "linear-gradient(to left, rgb(255, 0, 0), #720101)";
 
@@ -55,7 +62,7 @@ async function toast(text, is_correct){
   onClick: function(){} // Callback after click
 }).showToast();
 await new Promise(r => setTimeout(r, duration));
-
+toggle_answer_buttons(true);
 }
 
 async function setClipboard(text) {
@@ -85,6 +92,10 @@ window.onload = (event) => {
 
     document.querySelectorAll("table.buttons button").forEach(function(button){
                 button.addEventListener('click', async function() {
+                        if (this.classList.contains("disabled")){
+                            return;
+                        }
+
                         let user_answer = this.dataset.value;
                         let correct_answer = this.closest(".challenge-container").dataset.result
                         var ball_icon =  document.getElementsByClassName("ball " + current_index)[0];
