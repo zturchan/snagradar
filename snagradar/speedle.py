@@ -11,7 +11,6 @@ CHANCE_ONE_PLAYER_IN_TAILWIND = (
 CHANCE_PLAYER_TAILWIND = 0.3  # if tailwind is present, chance it's given to the player
 CHANCE_PLUS_SPEED_NATURE = 0.5
 CHANCE_MAX_SPEED_STAT_POINTS = 0.5
-MAX_SPEED_STAT_POINTS = 32
 
 
 class SpeedleMon:
@@ -33,7 +32,7 @@ class SpeedleMon:
                 case 0:
                     summary += "No speed investment"
                 case 32:
-                    summary += str(MAX_SPEED_STAT_POINTS) + " (Max) speed investment"
+                    summary += str(constants.MAX_SPEED_STAT_POINTS) + " (Max) speed investment"
                 case _:
                     summary += self.speed_stat_points + " speed investment"
             summary += "<br/>"
@@ -140,7 +139,7 @@ async def generate_todays_challenge(flaskapp):
 
         # TODO: Allow for other sensible values besides 0 and max, probably species-specific
         player_pokemon.speed_stat_points = (
-            MAX_SPEED_STAT_POINTS
+            constants.MAX_SPEED_STAT_POINTS
             if random.random() <= CHANCE_MAX_SPEED_STAT_POINTS
             else 0
         )
