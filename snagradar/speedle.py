@@ -40,7 +40,7 @@ class SpeedleMon:
                     summary += self.speed_stat_points + " speed investment"
             summary += "<br/>"
         if self.beneficial_nature:
-            summary += "With a +speed nature (Hasty, Jolly, Naive, and Timid grant +10% speed)<br/>"
+            summary += "<span title='Hasty, Jolly, Naive, and Timid grant +10% speed' class='nature-desc'>With a +speed nature</span><br/>"
         elif self.beneficial_nature is not None:
             summary += "With a neutral speed nature<br/>"
 
