@@ -78,7 +78,7 @@ def get_sprite_path(pokemon):
         return "notfound.png"
 
 
-async def read_speed_list_from_file(filename, app):
+async def read_speed_list_from_file(filename):
     # Expects a csv file containing the name of a pokemon and it's speed. One pokemon per row.
     pokemon = []
     with open(filename) as f:
@@ -92,23 +92,22 @@ async def read_speed_list_from_file(filename, app):
             api_name = None
             if (len(parts) > 2):
                 api_name = parts[2]
-            newMon = SpeedleMon(name, speed, app=app, api_name=api_name)
+            newMon = SpeedleMon(name, speed, api_name=api_name)
 
             pokemon.append(newMon)
     return pokemon
 
-async def get_regulation_roster(app):
+async def get_regulation_roster():
     # todo, grab these from a DB or something
     path = r"H:\Projects\snagradar\snagradar\speedle\ma-speed-list"
-    return await read_speed_list_from_file(path, app)
+    return await read_speed_list_from_file(path)
 
 def get_player_and_villain_teams(roster):
     # We don't want any overlaps of species so we pull all 20 mons at once.
     pokemon = random.sample(roster, NUMBER_OF_BATTLES * 2)
     return pokemon[:10], pokemon[10:]
 
-async def generate_todays_challenge(flaskapp):
-    app = flaskapp
+async def generate_todays_challenge():
     # Generate 10 pokemon for us, and then 10 for the villain.
 
     roster = await get_regulation_roster()
