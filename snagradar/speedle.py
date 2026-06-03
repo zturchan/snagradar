@@ -143,6 +143,6 @@ async def generate_todays_challenge(flaskapp):
             else 0
         )
 
-        challenge.append([player_pokemon, villain_pokemon])
+        challenges.append(Challenge(player_pokemon, villain_pokemon))
 
-    return challenge
+    return challenges
