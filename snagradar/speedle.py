@@ -11,6 +11,8 @@ CHANCE_ONE_PLAYER_IN_TAILWIND = (
 CHANCE_PLAYER_TAILWIND = 0.3  # if tailwind is present, chance it's given to the player
 CHANCE_PLUS_SPEED_NATURE = 0.5
 CHANCE_MAX_SPEED_STAT_POINTS = 0.5
+IMAGES_FILEPATH = "static/img/PokemonImages"
+IMAGES_MEGAS_SUBFOLDER = "/Megas"
 
 
 class SpeedleMon:
