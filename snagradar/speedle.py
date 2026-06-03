@@ -68,18 +68,14 @@ def get_sprite_path(pokemon):
         if (pokemon.species.lower() != pokemon.api_name.lower()):
             # This means we're an alternate form, but not a mega
             file_stem = pokemon.api_name.replace("-", " ")
-            pokemon.app.logger.info(f"filestem = {file_stem}")
-
             pattern = f"*{file_stem}.png"
-            pokemon.app.logger.info(f"pattern is {pattern}")
             sprite = sorted(pathlib.Path(folder).glob(pattern, case_sensitive=False))[0]
             return sprite
         pattern = f"*{pokemon.species}.png"
         sprite = sorted(pathlib.Path(folder).glob(pattern, case_sensitive=False))[0]
         return sprite
     except:
-        pokemon.app.logger.error(f"Could not get sprite for {pokemon.api_name}")
-    return "notfound.png"
+        return "notfound.png"
 
 
 async def read_speed_list_from_file(filename, app):
