@@ -17,18 +17,19 @@ IMAGES_MEGAS_SUBFOLDER = "/Megas"
 
 class SpeedleMon:
     def __init__(self, name, base_speed, *args, **kwargs):
-        # the name used by the api
         self.name = name
         self.base_speed = base_speed
-        # User for megas, formes, etc
-        self.display_name = kwargs.get("display_name", name)
+        # The space ensures we don't treat Meganium as a mega
+        self.is_mega = self.name.startswith("Mega ")
+        self.api_name = kwargs.get("api_name", None)
+        if (self.api_name == None):
+            self.api_name = self.name
         self.speed_stat_points = 0
         self.tailwind = None
         self.beneficial_nature = None
 
     def __str__(self):
-
-        summary = self.display_name + "<br/>"
+        summary = ""
         if self.speed_stat_points is not None:
             match self.speed_stat_points:
                 case 0:
