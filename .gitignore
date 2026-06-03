@@ -177,3 +177,4 @@ Scripts/
 scratch/
 secrets.py
 pyvenv.cfg
+.vscode/
