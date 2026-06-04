@@ -1,12 +1,11 @@
 from constants import MAX_SPEED_STAT_POINTS
 
 class Challenge:
-    def __init__(self, player_pokemon, villain_pokemon):
+    def __init__(self, player_pokemon, villain_pokemon, **kwargs):
         self.player_pokemon = player_pokemon
         self.villain_pokemon = villain_pokemon
-        self.result = self.determine_winner()
-        
-        
+        self.result = kwargs.get("result", self.determine_winner())
+
     def determine_winner(self):
         # Return -1 if player underspeeds, 0 if sometimes, 1 if player always outspeeds
         
