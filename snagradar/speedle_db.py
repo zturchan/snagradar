@@ -45,10 +45,11 @@ def adapt_speedlemon(speedlemon):
 {speedlemon.sprite};
 """
 
+def decode_boolean(bytes):
+    return str(bytes.decode("utf-8").strip()) != str(False)
+
 def convert_speedlemon(s):
     components = s.split(b";")
-    print("COMPONENTS")
-    print(components)
     try:
         speed_stat_points = int(components[3])
     except:
@@ -59,8 +60,8 @@ def convert_speedlemon(s):
         int(components[1]),
         api_name=components[2].decode("utf-8"),
         speed_stat_points = speed_stat_points,
-        tailwind=bool(components[4]),
-        beneficial_nature=bool(components[5]),
+        tailwind=decode_boolean(components[4]),
+        beneficial_nature=decode_boolean(components[5]),
         species=components[6].decode("utf-8"),
         sprite=components[7].decode("utf-8")
     )
