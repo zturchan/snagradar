@@ -1,7 +1,7 @@
 import random
 import aiopoke
-import pathlib
 import constants
+import speedle_db
 from speedlemon import SpeedleMon
 from challenge import Challenge
 
@@ -43,6 +43,10 @@ def get_player_and_villain_teams(roster):
     return pokemon[:10], pokemon[10:]
 
 async def generate_todays_challenge():
+    challenges_from_db = speedle_db.todays_challenges()
+    if (len(challenges_from_db)):
+        return challenges_from_db
+
     # Generate 10 pokemon for us, and then 10 for the villain.
 
     roster = await get_regulation_roster()
@@ -80,4 +84,5 @@ async def generate_todays_challenge():
 
         challenges.append(Challenge(player_pokemon, villain_pokemon))
 
+    speedle_db.write_challenges_to_sqlite(challenges)
     return challenges
