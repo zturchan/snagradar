@@ -4,6 +4,7 @@ class Challenge:
     def __init__(self, player_pokemon, villain_pokemon, **kwargs):
         self.player_pokemon = player_pokemon
         self.villain_pokemon = villain_pokemon
+        self.date = kwargs.get("date", None)
         self.result = kwargs.get("result", self.determine_winner())
 
     def determine_winner(self):
