@@ -49,7 +49,7 @@ async def generate_todays_challenge():
 
     # Generate 10 pokemon for us, and then 10 for the villain.
 
-    roster = await get_regulation_roster()
+    roster = await speedle_db.read_speed_list_from_db()
     player_pokemon_set, villain_pokemon_set = get_player_and_villain_teams(roster)
 
     for player_mon in player_pokemon_set:

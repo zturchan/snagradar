@@ -102,3 +102,12 @@ def challenges_for_date(date):
 
 def todays_challenges():
     return challenges_for_date(datetime.datetime.now().date())
+
+async def read_speed_list_from_db():
+    con = get_connection()
+    cur = con.execute(f"SELECT name, base_speed, pokemon_api_name FROM base_speeds")
+    pokemon = []
+    for p in cur.fetchall():
+        pokemon.append(SpeedleMon(p.name, p.base_speed, api_name=p.api_name))
+    con.close()
+    return pokemon
