@@ -143,6 +143,22 @@ div.challenge-container {
   display:none;
 }
 
+div.challenge-container.show-results {
+  display:block !important;
+}
+
+div.challenge-container.show-results .clicked:not(.correct){
+  border-width: 10px;
+  border-style: solid;
+  border-color: orangered;
+}
+
+div.challenge-container.show-results .correct{
+  border-width: 10px;
+  border-style: solid;
+  border-color: lime;
+}
+
 table.challenge{
   width: 100%;
 }

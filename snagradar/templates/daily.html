@@ -14,6 +14,8 @@
         <img class="ball 9 default" alt="Poké Ball icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/250px-Pok%C3%A9_Ball_icon.svg.png">
 
     </div>
+    <div id="daily-summary">
+    </div>
     {% for p in challenge %}
     <div class="challenge-container" data-result="{{p.result}}">
 
@@ -38,15 +40,14 @@
     </table>
         <table class="buttons">
         <tr>
-            <td colspan="2" class="button-cell"><button type="button" class="btn btn-success" data-value="1">Always Outspeeds</button></td>
-            <td colspan="2" class="button-cell"><button type="button" class="btn btn-primary" data-value="0">Sometimes Outspeeds</button></td>
-            <td colspan="2" class="button-cell"><button type="button" class="btn btn-danger" data-value="-1">Never Outspeeds</button></td>
+            {% autoescape false %}
+            <td colspan="2" class="button-cell"><button type="button" class="btn btn-success {{ 'correct' if p.result == 1 else '' }}" data-value="1">Always Outspeeds</button></td>
+            <td colspan="2" class="button-cell"><button type="button" class="btn btn-primary {{ 'correct' if p.result == 0 else '' }}" data-value="0">Sometimes Outspeeds</button></td>
+            <td colspan="2" class="button-cell"><button type="button" class="btn btn-danger {{ 'correct' if p.result == -1 else '' }}" data-value="-1">Never Outspeeds</button></td>
+            {% endautoescape %}
         </tr>
     </table>
     </div>
     {% endfor %}
-    <div id="daily-summary">
-    </div>
-
 </div>
 {% endblock %}

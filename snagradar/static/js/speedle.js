@@ -82,12 +82,22 @@ window.onload = (event) => {
     let user_score = [];
 
     document.addEventListener("click", (e) => {
-    const button = e.target.closest(".share");
-    if (button) {
-        let emoji_results = user_score.map(x => x === true ? "🔴" : "⚫");
-        setClipboard("Pokemon Speedle for " + today_pt() + "\r\n" + emoji_results.join("") + "\r\n" + window.location);
-        button.textContent = "Copied!";
-    }
+        const button = e.target.closest(".share");
+        if (button) {
+            let emoji_results = user_score.map(x => x === true ? "🔴" : "⚫");
+            setClipboard("Pokemon Speedle for " + today_pt() + "\r\n" + emoji_results.join("") + "\r\n" + window.location);
+            button.textContent = "Copied!";
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        const button = e.target.closest(".show");
+        if (button) {
+            matches.forEach(function(challenge){
+                //challenge.style.display = "block";
+                challenge.classList.add("show-results");
+            });
+        }
     });
 
     document.querySelectorAll("table.buttons button").forEach(function(button){
@@ -95,6 +105,7 @@ window.onload = (event) => {
                         if (this.classList.contains("disabled")){
                             return;
                         }
+                        this.classList.add("clicked");
 
                         let user_answer = this.dataset.value;
                         let correct_answer = this.closest(".challenge-container").dataset.result
@@ -129,7 +140,15 @@ window.onload = (event) => {
                             share.classList.add("btn");
                             share.classList.add("btn-success");
                             share.append("Share")
+
+                            let show = document.createElement("button");
+                            show.classList.add("show");
+                            show.classList.add("btn");
+                            show.classList.add("btn-primary");
+                            show.append("Show Answers")
+
                             score.append(share);
+                            score.append(show);
                             summary.append(score);
 
                             let result = document.createElement("p");
