@@ -13,30 +13,6 @@ CHANCE_PLAYER_TAILWIND = 0.3  # if tailwind is present, chance it's given to the
 CHANCE_PLUS_SPEED_NATURE = 0.5
 CHANCE_MAX_SPEED_STAT_POINTS = 0.5
 
-async def read_speed_list_from_file(filename):
-    # Expects a csv file containing the name of a pokemon and it's speed. One pokemon per row.
-    pokemon = []
-    with open(filename) as f:
-        for line in f:
-            line = line.strip()
-            if (len(line) == 0):
-                continue
-            parts = line.split(",")
-            name = parts[0]
-            speed = int(parts[1])
-            api_name = None
-            if (len(parts) > 2):
-                api_name = parts[2]
-            newMon = SpeedleMon(name, speed, api_name=api_name)
-
-            pokemon.append(newMon)
-    return pokemon
-
-async def get_regulation_roster():
-    # todo, grab these from a DB or something
-    path = r"H:\Projects\snagradar\snagradar\speedle\ma-speed-list"
-    return await read_speed_list_from_file(path)
-
 def get_player_and_villain_teams(roster):
     # We don't want any overlaps of species so we pull all 20 mons at once.
     pokemon = random.sample(roster, NUMBER_OF_BATTLES * 2)
