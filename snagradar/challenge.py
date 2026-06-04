@@ -7,6 +7,9 @@ class Challenge:
         self.date = kwargs.get("date", None)
         self.result = kwargs.get("result", self.determine_winner())
 
+    def __str__(self):
+        return f"{self.date}: {self.player_pokemon.name} vs {self.villain_pokemon.name} : {self.result}"
+
     def determine_winner(self):
         # Return -1 if player underspeeds, 0 if sometimes, 1 if player always outspeeds
         
