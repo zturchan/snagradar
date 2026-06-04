@@ -150,7 +150,7 @@ window.onload = (event) => {
                             summary.append(result);
 
                             let play_tomorrow = document.createElement("p");
-                            play_tomorrow.append("You can play tomorrow's challenge in:");
+                            play_tomorrow.append("You can play tomorrow's challenge in: ");
                             play_tomorrow.append(get_time_until_next_midnight_pacific());
                             summary.append(play_tomorrow);
 
