@@ -147,6 +147,14 @@ div.challenge-container.show-results {
   display:block !important;
 }
 
+.base-speed{
+  display: none;
+}
+
+.show-results .base-speed{
+  display: block;
+}
+
 div.challenge-container.show-results .clicked:not(.correct){
   border-width: 10px;
   border-style: solid;
