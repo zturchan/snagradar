@@ -29,7 +29,8 @@ def create_initial_db(con):
     cursor.execute("""
                 CREATE TABLE IF NOT EXISTS base_speeds(
                     pokemon_api_name TEXT PRIMARY KEY,
-                    base_speed INTERGER )
+                    base_speed INTERGER,
+                    name TEXT)
                 """)
     con.commit()
 
