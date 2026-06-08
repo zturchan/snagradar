@@ -80,6 +80,7 @@ window.onload = (event) => {
     matches[0].style.display = "block";
     let current_index = 0;
     let user_score = [];
+    let user_answers = [];
 
     document.addEventListener("click", (e) => {
         const button = e.target.closest(".share");
@@ -94,11 +95,17 @@ window.onload = (event) => {
         const button = e.target.closest(".show");
         if (button) {
             matches.forEach(function(challenge){
-                //challenge.style.display = "block";
                 challenge.classList.add("show-results");
             });
         }
     });
+
+    function write_results_to_local_storage(){
+        let options = { timeZone: 'Europe/London' }
+        let key = "silphscope_speedle_" + new Date().toLocaleDateString("en-US", options)
+
+        localStorage.setItem(key, JSON.stringify(user_score));
+    }
 
     document.querySelectorAll("table.buttons button").forEach(function(button){
                 button.addEventListener('click', async function() {
@@ -108,6 +115,8 @@ window.onload = (event) => {
                         this.classList.add("clicked");
 
                         let user_answer = this.dataset.value;
+                        user_answers.push(user_answer);
+
                         let correct_answer = this.closest(".challenge-container").dataset.result
                         var ball_icon =  document.getElementsByClassName("ball " + current_index)[0];
                         if (user_answer == correct_answer){
@@ -129,6 +138,7 @@ window.onload = (event) => {
                         }
 
                         if (current_index == 10){
+                            write_results_to_local_storage();
                             const correct_answers = user_score.filter(x => x === true).length;
 
                             summary = document.getElementById("daily-summary");
