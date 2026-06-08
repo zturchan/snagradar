@@ -100,46 +100,55 @@ window.onload = (event) => {
         }
     });
 
-    function write_results_to_local_storage(){
+
+    function get_todays_key(){
         let options = { timeZone: 'Europe/London' }
         let key = "silphscope_speedle_" + new Date().toLocaleDateString("en-US", options)
-
-        localStorage.setItem(key, JSON.stringify(user_score));
+        return key
     }
 
-    document.querySelectorAll("table.buttons button").forEach(function(button){
-                button.addEventListener('click', async function() {
-                        if (this.classList.contains("disabled")){
-                            return;
-                        }
-                        this.classList.add("clicked");
+    function write_results_to_local_storage(){
+        localStorage.setItem(get_todays_key(), JSON.stringify(user_answers));
+    }
 
-                        let user_answer = this.dataset.value;
-                        user_answers.push(user_answer);
+    function get_ball_icon(index){
+        return document.getElementsByClassName("ball " + index)[0];
+    }
 
-                        let correct_answer = this.closest(".challenge-container").dataset.result
-                        var ball_icon =  document.getElementsByClassName("ball " + current_index)[0];
-                        if (user_answer == correct_answer){
-                            user_score.push(true);
-                            await toast("Correct!", true)
-                        } else{
-                            user_score.push(false);
-                            ball_icon.classList.add("wrong");
-                            await toast("Incorrect! " + result_text(correct_answer), false)
-                        }
+    function read_results_from_local_storage(){
+        let stored_values = localStorage.getItem(get_todays_key());
+        if (stored_values != null){
+            user_answers = JSON.parse(stored_values);
+            // The user has already started today's puzzle
+            correct_answers = document.querySelectorAll(".challenge-container");
+            for(let i = 0; i < user_answers.length; ++i){
+                var ball_icon =  get_ball_icon(i);
+                correct_answer = correct_answers[i].dataset.result;
+                if(user_answers[i] == correct_answer){
+                    user_score.push(true);
+                } else{
+                    user_score.push(false);
+                    ball_icon.classList.add("wrong");
+                }
+                ball_icon.classList.remove("default");
+                matches[i].style.display = "none";
+                matches[i].querySelector(`button[data-value="${user_answers[i]}"]`).classList.add("clicked");
+            }
 
-                        ball_icon.classList.remove("default");
+            if (user_answers.length < 10){
+                matches[user_answers.length].style.display = "block";
+            }
 
-                        matches[current_index].style.display = "none";
-                        ++current_index;
+            if (user_answers.length == 10){
+                display_results();
+            }
+        }
+    }
 
-                        if (current_index < matches.length){
-                            matches[current_index].style.display = "block";
-                        }
+    read_results_from_local_storage();
 
-                        if (current_index == 10){
-                            write_results_to_local_storage();
-                            const correct_answers = user_score.filter(x => x === true).length;
+    function display_results(){
+        const correct_answers = user_score.filter(x => x === true).length;
 
                             summary = document.getElementById("daily-summary");
 
@@ -185,6 +194,42 @@ window.onload = (event) => {
 
 
                             summary.style.display = "block";
+    }
+
+    document.querySelectorAll("table.buttons button").forEach(function(button){
+                button.addEventListener('click', async function() {
+                        if (this.classList.contains("disabled")){
+                            return;
+                        }
+                        this.classList.add("clicked");
+
+                        let user_answer = this.dataset.value;
+                        user_answers.push(user_answer);
+
+                        let correct_answer = this.closest(".challenge-container").dataset.result
+                        var ball_icon =  get_ball_icon(current_index);
+                        if (user_answer == correct_answer){
+                            user_score.push(true);
+                            await toast("Correct!", true)
+                        } else{
+                            user_score.push(false);
+                            ball_icon.classList.add("wrong");
+                            await toast("Incorrect! " + result_text(correct_answer), false)
+                        }
+
+                        ball_icon.classList.remove("default");
+
+                        matches[current_index].style.display = "none";
+                        ++current_index;
+
+                        if (current_index < matches.length){
+                            matches[current_index].style.display = "block";
+                        }
+
+                        write_results_to_local_storage();
+
+                        if (current_index == 10){
+                            display_results();
                         }
          }, false);
 
