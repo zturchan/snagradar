@@ -108,6 +108,6 @@ async def read_speed_list_from_db():
     cur = con.execute(f"SELECT name, base_speed, pokemon_api_name FROM base_speeds")
     pokemon = []
     for p in cur.fetchall():
-        pokemon.append(SpeedleMon(p.name, p.base_speed, api_name=p.api_name))
+        pokemon.append(SpeedleMon(p[0], p[1], api_name=p[2]))
     con.close()
     return pokemon
