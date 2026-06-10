@@ -74,12 +74,6 @@ async function setClipboard(text) {
   await navigator.clipboard.write([clipboardItem]);
 }
 
-window.onload = (event) => {
-
-    document.querySelectorAll("img.pokemon").forEach(
-        (img) => img.src = img.dataset.src
-    );
-
     let matches = document.querySelectorAll(".challenge-container");
     matches[0].style.display = "block";
     let current_index = 0;
@@ -239,4 +233,3 @@ window.onload = (event) => {
          }, false);
 
     }    );
-};
