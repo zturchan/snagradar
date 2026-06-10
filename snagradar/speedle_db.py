@@ -75,8 +75,6 @@ def convert_date(val):
     """Convert ISO 8601 date to datetime.date object."""
     return datetime.date.fromisoformat(val.decode())
 
-
-
 def write_challenges_to_sqlite(challenges):
     con = get_connection()
     now = datetime.datetime.now().date()
@@ -93,7 +91,7 @@ def parse_challenge(challenge_row):
 def challenges_for_date(date):
     print(date)
     con = get_connection()
-    cur = con.execute(f"SELECT date, player_pokemon, villain_pokemon, result FROM daily_challenge_pokemon WHERE DATE=?", (date,))
+    cur = con.execute(f"SELECT date, player_pokemon, villain_pokemon, result FROM daily_challenge_pokemon WHERE DATE=? LIMIT 10", (date,))
     challenges = []
     for c in cur.fetchall():
         challenges.append(parse_challenge(c))
