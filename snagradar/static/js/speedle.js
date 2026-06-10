@@ -75,8 +75,12 @@ async function setClipboard(text) {
 }
 
 window.onload = (event) => {
-    let matches = document.querySelectorAll(".challenge-container");
 
+    document.querySelectorAll("img.pokemon").forEach(
+        (img) => img.src = img.dataset.src
+    );
+
+    let matches = document.querySelectorAll(".challenge-container");
     matches[0].style.display = "block";
     let current_index = 0;
     let user_score = [];
@@ -136,6 +140,7 @@ window.onload = (event) => {
             }
 
             if (user_answers.length < 10){
+                current_index = user_answers.length;
                 matches[user_answers.length].style.display = "block";
             }
 

@@ -27,12 +27,12 @@
         <tr>
             {% autoescape false %}
             <td colspan="3">
-                <div><img src="{{p.player_pokemon.sprite}}" class="pokemon"/></div>
+                <div><img data-src="{{p.player_pokemon.sprite}}" class="pokemon"/></div>
                 {{p.player_pokemon}}
                 <div class="base-speed">Base Speed: {{p.player_pokemon.base_speed}}</div>
             </td>
             <td colspan="3">
-                <div><img src="{{p.villain_pokemon.sprite}}" class="pokemon"/></div>
+                <div><img data-src="{{p.villain_pokemon.sprite}}" class="pokemon"/></div>
                 {{p.villain_pokemon}}
                 <div class="base-speed">Base Speed: {{p.villain_pokemon.base_speed}}</div>
             </td>
